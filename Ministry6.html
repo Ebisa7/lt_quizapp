@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grade 6 Ministry Questions (Oromia)</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    /* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background-color: #fff4ec;
+    }
+
+    /* Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: black;
+      background: #fcf0e8;
+      padding: 15px 30px;
+    }
+
+    .navbar .logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar .logo img {
+      height: 90px;
+      margin-right: 10px;
+    }
+
+    .navbar .logo h1 {
+      color: rgb(0, 0, 0);
+      font-size: 22px;
+    }
+
+    .navbar .nav-links {
+      list-style: none;
+
+      display: flex;
+    }
+
+    .navbar .nav-links li {
+      margin: 0 15px;
+    }
+
+    .navbar .nav-links a {
+      color: rgb(0, 0, 0);
+      text-decoration: none;
+      font-size: 18px;
+      transition: 0.3s;
+    }
+
+    .navbar .nav-links a:hover {
+      color: #f39c12;
+    }
+
+    /* Page Header */
+    .head {
+      text-align: center;
+      font-size: 32px;
+      color: #333;
+      margin-top: 40px;
+      font-weight: bold;
+    }
+
+    /* Subject Buttons */
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 30px;
+      gap: 20px;
+    }
+
+    .button {
+      background: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 200px;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .button:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .button img {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 10px;
+    }
+
+    .button p {
+      font-size: 18px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    /* Back & Download Buttons */
+    .top-buttons {
+      display: flex;
+      justify-content: space-between;
+      padding: 20px 30px;
+    }
+
+    .back, .download-btn {
+      background: none;
+      border: none;
+      color: #2c3e50;
+      font-size: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .back:hover, .download-btn:hover {
+      color: #f39c12;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .navbar .nav-links {
+        flex-direction: column;
+        margin-top: 10px;
+      }
+
+      .navbar .nav-links li {
+        margin: 10px 0;
+      }
+
+      .container {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="logo">
+      <img src="logo.png" alt="Site Logo">
+      <h1>Quiz</h1>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html"><i class="fa-solid fa-home"></i> Home</a></li>
+      <li><a href="#"><i class="fa-solid fa-book"></i> Subjects</a></li>
+      <li><a href="#"><i class="fa-solid fa-info-circle"></i> About</a></li>
+    </ul>
+  </div>
+
+  <!-- Top Buttons -->
+  <div class="top-buttons">
+    <button onclick="back()" class="back"><i class="fa-solid fa-arrow-left"></i> Back</button>
+    <a href="https://docs.google.com/document/d/17po-oPu4GZ8yf5EBMLtgpuU-o8ph8gIy/export?format=pdf" 
+      class="download-btn" 
+      download> 
+      <i class="fa-solid fa-download"></i> Download all
+    </a>
+  </div>
+
+  <!-- Page Heading -->
+  <h1 class="head">Grade 6 - Choose Subject</h1>
+
+  <!-- Subject Buttons -->
+  <div class="container">
+    <div onclick="maths()" class="button">
+      <img src="img.png" alt="Maths">
+      <p>Maths (AO)</p>
+    </div>
+
+    <div onclick="science()" class="button">
+      <img src="img.png" alt="Science">
+      <p>Science (AO)</p>
+    </div>
+
+    <div onclick="english()" class="button">
+      <img src="img.png" alt="English">
+      <p>English</p>
+    </div>
+
+    <div onclick="oromo()" class="button">
+      <img src="img.png" alt="Afaan Oromo">
+      <p>Afaan Oromo</p>
+    </div>
+
+    <div onclick="civics()" class="button">
+      <img src="img.png" alt="Civics">
+      <p>Civics/Gada (AO)</p>
+    </div>
+  </div>
+
+  <script>
+    
+    function back() {
+      window.location.href = 'ministry.html'; 
+    }
+
+    function science() {
+      window.location.href = 'science.html'; 
+    }
+
+    function maths() {
+      window.location.href = 'maths.html'; 
+    }
+
+    function english() {
+      window.location.href = 'english.html'; 
+    }
+
+    function oromo() {
+      window.location.href = 'oromo.html'; 
+    }
+
+    function civics() {
+      window.location.href = 'civics.html'; 
+    }
+  </script>
+
+</body>
+</html>

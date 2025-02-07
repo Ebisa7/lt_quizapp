@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
+  <title>Firestore Editor & Quiz Adder</title>
+  <!-- Firebase SDKs (using the same version for both sections) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
+  <style>
+    /* Common Body Styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+    h1 {
+      margin-top: 0;
+    }
+    /* Container Styles */
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 5px;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      background-color: #ebebeb;
+      border: none;
+      border-radius: 20px;
+      margin-top: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 10px 20px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    
+    /* Flexbox for Quiz Adder choices layout */
+    .choices-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .choices-container input {
+      width: 100%;
+    }
+    
+    /* Popup Toolbar Styles (for both editors) */
+    .toolbar {
+      display: none;
+      position: absolute;
+      background: white;
+      border: 1px solid #ccc;
+      padding: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+    }
+    .toolbar button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 0 5px;
+      color: #333;
+    }
+    .toolbar button:hover {
+      color: #000;
+    }
+  </style>
+  
+  <!-- Google Analytics Scripts (as in the original Quiz Adder page) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NQJ8QBF8ET&amp;cx=c&amp;_slc=1"></script>
+  <script async src="https://www.google-analytics.com/plugins/ua/linkid.js"></script>
+  <script async src="https://www.google-analytics.com/analytics.js"></script>
+</head>
+<body>
+
+    
+    <!-- Popup Toolbar for the Editor (applies to the docData textarea) -->
+    <div id="editorToolbar" class="toolbar">
+      <button type="button" id="editorBoldButton" title="Bold"><strong>B</strong></button>
+      <button type="button" id="editorUnderlineButton" title="Underline"><u>U</u></button>
+    </div>
+  </div>
+  
+  <!-- Quiz Adder Section -->
+  <div class="container" id="quizAdderSection">
+    <h1>Add a Quiz Question</h1>
+    <form id="addQuizForm">
+      <!-- Question Field (HTML allowed) -->
+      <label for="question">Question:</label>
+      <textarea id="question" rows="3" placeholder="Enter question text (HTML allowed, e.g., <strong>bold</strong> or <u>underline</u>)"></textarea>
+      
+      <!-- Popup Toolbar for the Quiz Question -->
+      <div id="toolbar" class="toolbar">
+        <button type="button" id="boldButton" title="Bold"><strong>B</strong></button>
+        <button type="button" id="underlineButton" title="Underline"><u>U</u></button>
+      </div>
+      
+      <!-- Choices (A, B, C, D) in one row -->
+      <div class="choices-container">
+        <div>
+          <label for="choiceA">Choice A:</label>
+          <input type="text" id="choiceA" placeholder="Enter Choice A">
+        </div>
+        <div>
+          <label for="choiceB">Choice B:</label>
+          <input type="text" id="choiceB" placeholder="Enter Choice B">
+        </div>
+        <div>
+          <label for="choiceC">Choice C:</label>
+          <input type="text" id="choiceC" placeholder="Enter Choice C">
+        </div>
+        <div>
+          <label for="choiceD">Choice D:</label>
+          <input type="text" id="choiceD" placeholder="Enter Choice D">
+        </div>
+      </div>
+      
+      <!-- Correct Answer Field -->
+      <label for="correctAnswer">Correct Answer (A, B, C, or D):</label>
+      <input type="text" id="correctAnswer" placeholder="Enter correct answer">
+      
+      <button type="submit">Add Question</button>
+    </form>
+  </div>
+
+    <!-- Firestore Document Editor Section -->
+    <div class="container" id="editorSection">
+        <h1>Firestore Document Editor</h1>
+        <label for="collectionName">Collection Name:</label>
+        <input type="text" id="collectionName" placeholder="Enter collection name">
+        <br><br>
+        
+        <label for="documentName">Document Name:</label>
+        <input type="text" id="documentName" placeholder="Enter document name">
+        <br><br>
+        
+        <button id="loadDoc">Load Document</button>
+        <br><br>
+        
+        <textarea id="docData" rows="20" cols="80" placeholder="Document data will appear here..."></textarea>
+        <br><br>
+        
+        <button id="saveDoc">Save Document</button>
+  
+  <!-- Combined Scripts -->
+  <script>
+    // Firebase configuration (shared by both sections)
+    const firebaseConfig = {
+      apiKey: "AIzaSyDelPBnpY0xv-_ShgWreMZpld_SUWdRwJk",
+      authDomain: "lt-website-bf509.firebaseapp.com",
+      projectId: "lt-website-bf509",
+      storageBucket: "lt-website-bf509.firebasestorage.app",
+      messagingSenderId: "43884867628",
+      appId: "1:43884867628:web:617a17c06d37b014a86189",
+      measurementId: "G-XL54K0J9BX"
+    };
+    
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    
+    /* ----------------------- */
+    /* Firestore Document Editor */
+    /* ----------------------- */
+    
+    // Load document data when the "Load Document" button is clicked
+    document.getElementById("loadDoc").addEventListener("click", async () => {
+      const collectionName = document.getElementById("collectionName").value.trim();
+      const documentName = document.getElementById("documentName").value.trim();
+      if (!collectionName || !documentName) {
+        alert("Please enter both a collection and document name.");
+        return;
+      }
+      try {
+        const docRef = db.collection(collectionName).doc(documentName);
+        const docSnap = await docRef.get();
+        if (docSnap.exists) {
+          // Display the document data in a formatted JSON string
+          document.getElementById("docData").value = JSON.stringify(docSnap.data(), null, 2);
+        } else {
+          alert("Document does not exist.");
+          document.getElementById("docData").value = "";
+        }
+      } catch (error) {
+        console.error("Error fetching document:", error);
+        alert("Error loading document. Check the console for details.");
+      }
+    });
+    
+    // Save updated document data when the "Save Document" button is clicked
+    document.getElementById("saveDoc").addEventListener("click", async () => {
+      const collectionName = document.getElementById("collectionName").value.trim();
+      const documentName = document.getElementById("documentName").value.trim();
+      if (!collectionName || !documentName) {
+        alert("Please enter both a collection and document name.");
+        return;
+      }
+      let updatedData;
+      try {
+        // Parse the JSON data from the textarea
+        updatedData = JSON.parse(document.getElementById("docData").value);
+      } catch (error) {
+        alert("Invalid JSON format. Please fix the errors and try again.");
+        return;
+      }
+      try {
+        const docRef = db.collection(collectionName).doc(documentName);
+        await docRef.set(updatedData);
+        alert("Document updated successfully!");
+      } catch (error) {
+        console.error("Error updating document:", error);
+        alert("Error updating document. Check the console for details.");
+      }
+    });
+    
+    // Popup toolbar logic for the Editor's docData textarea
+    (function() {
+      const editorTextarea = document.getElementById('docData');
+      const editorToolbar = document.getElementById('editorToolbar');
+      const editorBoldButton = document.getElementById('editorBoldButton');
+      const editorUnderlineButton = document.getElementById('editorUnderlineButton');
+      
+      // Show toolbar when text is selected in the editor textarea
+      editorTextarea.addEventListener('mouseup', function(e) {
+        // Using textarea selection properties rather than window.getSelection()
+        if (editorTextarea.selectionStart !== editorTextarea.selectionEnd) {
+          editorToolbar.style.display = 'block';
+          editorToolbar.style.top = (e.clientY + window.scrollY) + 'px';
+          editorToolbar.style.left = (e.clientX + window.scrollX) + 'px';
+        } else {
+          editorToolbar.style.display = 'none';
+        }
+      });
+      
+      // Hide toolbar when clicking outside the textarea and its buttons
+      document.addEventListener('click', function(e) {
+        if (e.target !== editorTextarea && e.target !== editorBoldButton && e.target !== editorUnderlineButton) {
+          editorToolbar.style.display = 'none';
+        }
+      });
+      
+      // Add bold formatting for the editor
+      editorBoldButton.addEventListener('click', function() {
+        wrapSelectedText(editorTextarea, '<strong>', '</strong>', editorToolbar);
+      });
+      
+      // Add underline formatting for the editor
+      editorUnderlineButton.addEventListener('click', function() {
+        wrapSelectedText(editorTextarea, '<u>', '</u>', editorToolbar);
+      });
+    })();
+    
+    /* ----------------------- */
+    /* Quiz Adder Section */
+    /* ----------------------- */
+    
+    // Listen for Quiz form submission
+    document.getElementById('addQuizForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Get values from form fields
+      const questionText = document.getElementById('question').value;
+      const choiceA = document.getElementById('choiceA').value;
+      const choiceB = document.getElementById('choiceB').value;
+      const choiceC = document.getElementById('choiceC').value;
+      const choiceD = document.getElementById('choiceD').value;
+      const correctAnswer = document.getElementById('correctAnswer').value.trim().toUpperCase();
+      
+      // Create an array for choices in order (A, B, C, D)
+      const choices = [choiceA, choiceB, choiceC, choiceD];
+      
+      // Add the question to the "questions" collection in Firestore
+      db.collection('questions').add({
+        question: questionText,
+        choices: choices,
+        correctAnswer: correctAnswer
+      })
+      .then(() => {
+        alert("Question added successfully!");
+        document.getElementById('addQuizForm').reset();
+      })
+      .catch((error) => {
+        console.error("Error adding document: ", error);
+      });
+    });
+    
+    // Popup toolbar logic for the Quiz Question textarea
+    (function() {
+      const questionTextarea = document.getElementById('question');
+      const toolbar = document.getElementById('toolbar');
+      const boldButton = document.getElementById('boldButton');
+      const underlineButton = document.getElementById('underlineButton');
+      
+      // Show toolbar when text is selected in the question textarea
+      questionTextarea.addEventListener('mouseup', function(e) {
+        if (questionTextarea.selectionStart !== questionTextarea.selectionEnd) {
+          toolbar.style.display = 'block';
+          toolbar.style.top = (e.clientY + window.scrollY) + 'px';
+          toolbar.style.left = (e.clientX + window.scrollX) + 'px';
+        } else {
+          toolbar.style.display = 'none';
+        }
+      });
+      
+      // Hide toolbar when clicking outside the textarea and its buttons
+      document.addEventListener('click', function(e) {
+        if (e.target !== questionTextarea && e.target !== boldButton && e.target !== underlineButton) {
+          toolbar.style.display = 'none';
+        }
+      });
+      
+      // Add bold formatting for the question textarea
+      boldButton.addEventListener('click', function() {
+        wrapSelectedText(questionTextarea, '<strong>', '</strong>', toolbar);
+      });
+      
+      // Add underline formatting for the question textarea
+      underlineButton.addEventListener('click', function() {
+        wrapSelectedText(questionTextarea, '<u>', '</u>', toolbar);
+      });
+    })();
+    
+    // Common function to wrap selected text with HTML tags for any textarea
+    function wrapSelectedText(textarea, startTag, endTag, toolbarEl) {
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const selectedText = textarea.value.substring(start, end);
+      const newText = textarea.value.substring(0, start) + startTag + selectedText + endTag + textarea.value.substring(end);
+      textarea.value = newText;
+      // Optionally, reset the selection (if desired)
+      toolbarEl.style.display = 'none';
+    }
+  </script>
+  
+  <!-- Google Analytics initialization -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    
+    ga('create', 'UA-1656750-34', 'auto');
+    ga('require', 'linkid', 'linkid.js');
+    ga('require', 'displayfeatures');
+    ga('send', 'pageview');
+  </script>
+  
+  <!-- (Optional) Additional analytics or tracking if needed -->
+  <iframe allow="join-ad-interest-group" data-tagging-id="G-NQJ8QBF8ET" data-load-time="1738849444415" height="0" width="0" src="https://td.doubleclick.net/td/ga/rul?tid=G-NQJ8QBF8ET&amp;gacid=444666590.1731655253&amp;gtm=45je5240v9123946073za200&amp;dma=0&amp;gcd=13l3l3l3l2l1&amp;npa=0&amp;pscdl=noapi&amp;aip=1&amp;fledge=1&amp;frm=0&amp;tag_exp=102067808~102081485~102123608~102482433~102539968~102556565~102558064~102587590&amp;z=1854701106" style="display: none; visibility: hidden;"></iframe>
+</body>
+</html>
