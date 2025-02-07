@@ -5,7 +5,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
-  <title>Quiz Taker with Custom Checkboxes</title>
+  <title>Science - Lt quiz</title>
   <!-- Firebase Compat SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore-compat.js"></script>
@@ -258,6 +258,7 @@
     }
     .navbar .logo {
       display: flex;
+      cursor: pointer;
       align-items: center;
     }
     .navbar .logo img {
@@ -291,7 +292,7 @@
 <body>
   <div class="navbar">
     <div class="logo">
-      <img src="logo.png" alt="Site Logo">
+      <img onclick="home()" src="logo.png" alt="Site Logo">
       <h1>Quiz</h1>
     </div>
     <ul class="nav-links">
@@ -334,7 +335,11 @@
 
 
 function back() {
-      window.location.href = 'ministry6.html'; 
+      window.location.href = 'ministry.html'; 
+    }
+
+    function home() {
+      window.location.href = 'index.html'; 
     }
 
     // Firebase configuration

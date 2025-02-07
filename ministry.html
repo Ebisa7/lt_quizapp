@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Grade 6 Ministry Questions (Oromia)</title>
+  <title>Grade 6 Ministry - Lt quiz</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <style>
     /* General Reset */
@@ -35,12 +35,13 @@
 
     .navbar .logo img {
       height: 90px;
+      cursor: pointer;
       margin-right: 10px;
     }
 
     .navbar .logo h1 {
       color: rgb(0, 0, 0);
-      font-size: 25px;
+      font-size: 22px;
     }
 
     .navbar .nav-links {
@@ -119,10 +120,9 @@
       padding: 20px 30px;
     }
 
-    .back, .download-btn  {
+    .back, .download-btn {
       background: none;
       border: none;
-      margin-left: 10px;
       color: #2c3e50;
       font-size: 20px;
       cursor: pointer;
@@ -154,48 +154,89 @@
         align-items: center;
       }
     }
-
   </style>
 </head>
 <body>
 
+  <!-- Navbar -->
   <div class="navbar">
     <div class="logo">
-      <img src="logo.png" alt="Site Logo">
+      <img onclick="back()" src="logo.png" alt="Site Logo">
       <h1>Quiz</h1>
     </div>
     <ul class="nav-links">
       <li><a href="index.html"><i class="fa-solid fa-home"></i> Home</a></li>
+      <li><a href="#"><i class="fa-solid fa-book"></i> Subjects</a></li>
       <li><a href="#"><i class="fa-solid fa-info-circle"></i> About</a></li>
     </ul>
   </div>
-  <div onclick="back()" class="back"><button class="back"><i class="fa-solid fa-arrow-left"></i>Back</button></div>
 
-
-
+  <!-- Top Buttons -->
+  <div class="top-buttons">
+    <button onclick="back()" class="back"><i class="fa-solid fa-arrow-left"></i> Back</button>
+    <a href="https://docs.google.com/document/d/17po-oPu4GZ8yf5EBMLtgpuU-o8ph8gIy/export?format=pdf" 
+      class="download-btn" 
+      download> 
+      <i class="fa-solid fa-download"></i> Download all
+    </a>
+  </div>
 
   <!-- Page Heading -->
-  <h1 class="head">Ministry - Choose grade</h1>
+  <h1 class="head">Grade 6 - Choose Subject</h1>
 
   <!-- Subject Buttons -->
   <div class="container">
-    <div onclick="g6()" class="button">
+    <div onclick="maths()" class="button">
       <img src="img.png" alt="Maths">
-      <p> Grade 6 (AO)</p>
+      <p>Maths (AO)</p>
     </div>
 
-    
+    <div onclick="science()" class="button">
+      <img src="img.png" alt="Science">
+      <p>Science (AO)</p>
+    </div>
+
+    <div onclick="english()" class="button">
+      <img src="img.png" alt="English">
+      <p>English</p>
+    </div>
+
+    <div onclick="oromo()" class="button">
+      <img src="img.png" alt="Afaan Oromo">
+      <p>Afaan Oromo</p>
+    </div>
+
+    <div onclick="civics()" class="button">
+      <img src="img.png" alt="Civics">
+      <p>Civics/Gada (AO)</p>
+    </div>
+  </div>
 
   <script>
     
-    function g6() {
-      window.location.href = 'ministry6.html'; 
-    }
-
     function back() {
       window.location.href = 'index.html'; 
-}
+    }
 
+    function science() {
+      window.location.href = 'science.html'; 
+    }
+
+    function maths() {
+      window.location.href = 'maths.html'; 
+    }
+
+    function english() {
+      window.location.href = 'english.html'; 
+    }
+
+    function oromo() {
+      window.location.href = 'oromo.html'; 
+    }
+
+    function civics() {
+      window.location.href = 'civics.html'; 
+    }
   </script>
 
 </body>

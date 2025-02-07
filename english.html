@@ -5,7 +5,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
-  <title>Quiz Taker with Custom Checkboxes</title>
+  <title>English - Lt quiz</title>
   <!-- Firebase Compat SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore-compat.js"></script>
@@ -13,14 +13,15 @@
      /* Overall container styling */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: white;
+      background-color: #fcf0e8;
       padding: 20px;
       margin: 0;
     }
     .container {
       max-width: 800px;
       margin: 0 auto;
-      background: white;
+      margin-top: 40px;
+      background: #fcf0e8;
       padding: 30px;
       border-radius: 8px;
 
@@ -35,7 +36,7 @@
     .question-block {
       margin-bottom: 30px;
       padding: 15px;
-      background: #fafafa;
+      background: #fcf4ef;
       border: 1px solid #ddd;
       border-radius: 13px;
     }
@@ -57,7 +58,7 @@
       background-color: rgba(0, 0, 0, 0.5);
     }
     .modal-content {
-      background: #fff;
+      background: #fcf0e8;
       margin: 10% auto;
       padding: 30px;
       border-radius: 8px;
@@ -209,9 +210,9 @@
       margin-bottom: 8px;
     }
     
-    .back {
+        .back {
           position: fixed;
-    top: 20px;
+    top: 150px;
     border: none;
     left: 30px;
     background: none;
@@ -229,7 +230,7 @@
     
     .download-btn {
     position: fixed;
-    top: 20px;
+    top: 150px;
     right: 30px;
     background: none;
     color: rgb(0, 0, 0);
@@ -240,12 +241,69 @@
 }
 
 
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
 
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: black;
+      background: #fcf0e8;
+      padding: 15px 30px;
+    }
+    .navbar .logo {
+      display: flex;
+      cursor: pointer;
+      align-items: center;
+    }
+    .navbar .logo img {
+      height: 80px;
+      margin-right: 10px;
+    }
+    .navbar .logo h1 {
+      color: black;
+      align-items: center;
+      font-size: 23px;
+      margin: 0 1px;
+    }
+    .navbar .nav-links {
+      list-style: none;
+      display: flex;
+    }
+    .navbar .nav-links li {
+      margin: 0 15px;
+    }
+    .navbar .nav-links a {
+      color: black;
+      text-decoration: none;
+      font-size: 18px;
+      transition: 0.3s;
+    }
+    .navbar .nav-links a:hover {
+      color: #f39c12;
+    }
   </style>
 </head>
 <body>
+  <div class="navbar">
+    <div class="logo">
+      <img onclick="home()" src="logo.png" alt="Site Logo">
+      <h1>Quiz</h1>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html"><i class="fa-solid fa-home"></i> Home</a></li>
+    </ul>
+  </div>
 
-  <a href="https://docs.google.com/document/d/1gOOU9DPCPLqmZykJ041DwsV9LEA0pbbx/export?format=pdf" 
+    
+    
+
+  <a href="https://docs.google.com/document/d/1s9116IONGJnUJOgxLbeRIodKRpaem-kp/export?format=pdf" 
    class="download-btn" 
    download>
     <i class="fa-solid fa-download"></i>
@@ -275,9 +333,14 @@
 
   <script>
 
+
 function back() {
-    window.history.back();
-}
+      window.location.href = 'ministry.html'; 
+    }
+
+    function home() {
+      window.location.href = 'index.html'; 
+    }
 
     // Firebase configuration
     const firebaseConfig = {
@@ -297,7 +360,8 @@ function back() {
     let quizData = [];
 
     // Define construction sections: { startIndex, endIndex, content }
-const constructionSections = [
+    // Define construction sections: { startIndex, endIndex, content }
+    const constructionSections = [
   { startIndex: 0, endIndex: 1, content: "<u>ITEMS 1-3 ARE BASED ON THE PASSAGE BELOW. READ IT AND CHOOSE THE CORRECT ANSWER.</u> <br><br> The sun gives us light. So it keeps us warm and gives us heat. My mother dries our clothes in the sun. Plants make their food with help of sunlight. When the sun rises, it becomes day and when it sets it becomes night. The sun rises in the East and sets in the West. If there is no sun, it will be dark everywhere. So I like the sun very much." },
   { startIndex: 3, endIndex: 4, content: "<u>FOR ITEMS 4-14 CHOOSE THE CORRECT ALTERNATIVE THAT ANSWERS THE QUESTION.</u>" },
   { startIndex: 5, endIndex: 6, content: "<u>For items 6-7, analyze the sentence structure.</u>" },
