@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="robots" content="noindex">
-  <title>Firestore Editor & Quiz Adder</title>
-  <!-- Firebase SDKs (using the same version for both sections) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Combined Firestore Editor, Quiz Adder & Quiz Uploader</title>
+  <!-- Firebase SDKs (using compat version for easier migration) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   
@@ -21,11 +22,10 @@
     /* Container Styles */
     .container {
       max-width: 800px;
-      margin: auto;
+      margin: 40px auto;
       background: white;
       padding: 20px;
       border-radius: 5px;
-      margin-bottom: 40px;
       position: relative;
     }
     label {
@@ -67,7 +67,7 @@
       width: 100%;
     }
     
-    /* Popup Toolbar Styles (for both editors) */
+    /* Popup Toolbar Styles */
     .toolbar {
       display: none;
       position: absolute;
@@ -88,26 +88,65 @@
     .toolbar button:hover {
       color: #000;
     }
+    
+    /* Status Popup Styles */
+    #statusPopup {
+      position: fixed;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #4CAF50; /* default to success green */
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      opacity: 0;
+      transition: top 0.5s ease, opacity 0.5s ease;
+      z-index: 9999;
+    }
+    #statusPopup.show {
+      top: 20px;
+      opacity: 1;
+    }
+    
+    /* Upload Section Styles */
+    #dropZone {
+      border: 2px dashed #ccc;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.3s ease;
+    }
+    #dropZone.dragover {
+      border-color: #4CAF50;
+    }
+    /* Hide the file input element */
+    #fileInput {
+      display: none;
+    }
   </style>
-  
-  <!-- Google Analytics Scripts (as in the original Quiz Adder page) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NQJ8QBF8ET&amp;cx=c&amp;_slc=1"></script>
-  <script async src="https://www.google-analytics.com/plugins/ua/linkid.js"></script>
-  <script async src="https://www.google-analytics.com/analytics.js"></script>
 </head>
 <body>
-
-    
-    <!-- Popup Toolbar for the Editor (applies to the docData textarea) -->
-    <div id="editorToolbar" class="toolbar">
-      <button type="button" id="editorBoldButton" title="Bold"><strong>B</strong></button>
-      <button type="button" id="editorUnderlineButton" title="Underline"><u>U</u></button>
-    </div>
+  <!-- Status Popup (shared across sections) -->
+  <div id="statusPopup"></div>
+  
+  <!-- Popup Toolbar for the Document Editor (applies to the docData textarea) -->
+  <div id="editorToolbar" class="toolbar">
+    <button type="button" id="editorBoldButton" title="Bold"><strong>B</strong></button>
+    <button type="button" id="editorUnderlineButton" title="Underline"><u>U</u></button>
   </div>
   
   <!-- Quiz Adder Section -->
   <div class="container" id="quizAdderSection">
     <h1>Add a Quiz Question</h1>
+    
+    <!-- Custom Firestore path options for quiz adder -->
+    <label for="quizCollectionName">Collection Name:</label>
+    <input type="text" id="quizCollectionName" placeholder="Enter collection name (default is 'questions')">
+    
+    <label for="quizDocumentName">Document Name (optional):</label>
+    <input type="text" id="quizDocumentName" placeholder="Enter document name (leave blank for auto-ID)">
+    
     <form id="addQuizForm">
       <!-- Question Field (HTML allowed) -->
       <label for="question">Question:</label>
@@ -146,29 +185,44 @@
       <button type="submit">Add Question</button>
     </form>
   </div>
-
-    <!-- Firestore Document Editor Section -->
-    <div class="container" id="editorSection">
-        <h1>Firestore Document Editor</h1>
-        <label for="collectionName">Collection Name:</label>
-        <input type="text" id="collectionName" placeholder="Enter collection name">
-        <br><br>
-        
-        <label for="documentName">Document Name:</label>
-        <input type="text" id="documentName" placeholder="Enter document name">
-        <br><br>
-        
-        <button id="loadDoc">Load Document</button>
-        <br><br>
-        
-        <textarea id="docData" rows="20" cols="80" placeholder="Document data will appear here..."></textarea>
-        <br><br>
-        
-        <button id="saveDoc">Save Document</button>
+  
+  <!-- Firestore Document Editor Section -->
+  <div class="container" id="editorSection">
+    <h1>Firestore Document Editor</h1>
+    <label for="collectionName">Collection Name:</label>
+    <input type="text" id="collectionName" placeholder="Enter collection name">
+    <br><br>
+    
+    <label for="documentName">Document Name:</label>
+    <input type="text" id="documentName" placeholder="Enter document name">
+    <br><br>
+    
+    <button id="loadDoc">Load Document</button>
+    <br><br>
+    
+    <textarea id="docData" rows="20" cols="80" placeholder="Document data will appear here..."></textarea>
+    <br><br>
+    
+    <button id="saveDoc">Save Document</button>
+  </div>
+  
+  <!-- Upload Quiz Questions Section -->
+  <div class="container" id="uploadSection">
+    <h1>Upload Quiz Questions</h1>
+    <!-- New: Collection input for JSON uploader -->
+    <label for="uploadCollectionName">Collection Name:</label>
+    <input type="text" id="uploadCollectionName" placeholder="Enter collection name (default is 'Maths')">
+    
+    <div id="dropZone">
+      <p>Drag & Drop JSON file here or click to select file</p>
+      <input type="file" id="fileInput" accept=".json">
+    </div>
+    <button id="uploadButton">Upload and Add Questions</button>
+  </div>
   
   <!-- Combined Scripts -->
   <script>
-    // Firebase configuration (shared by both sections)
+    /************** Firebase Initialization **************/
     const firebaseConfig = {
       apiKey: "AIzaSyDelPBnpY0xv-_ShgWreMZpld_SUWdRwJk",
       authDomain: "lt-website-bf509.firebaseapp.com",
@@ -178,36 +232,49 @@
       appId: "1:43884867628:web:617a17c06d37b014a86189",
       measurementId: "G-XL54K0J9BX"
     };
-    
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     
-    /* ----------------------- */
-    /* Firestore Document Editor */
-    /* ----------------------- */
+    /************** Status Popup Function **************/
+    function showStatus(message, type) {
+      const popup = document.getElementById('statusPopup');
+      popup.innerText = message;
+      // Set background color based on type
+      if (type === 'error') {
+        popup.style.backgroundColor = '#f44336';
+      } else if (type === 'info') {
+        popup.style.backgroundColor = '#2196F3';
+      } else { // default to success
+        popup.style.backgroundColor = '#4CAF50';
+      }
+      popup.classList.add('show');
+      setTimeout(() => {
+        popup.classList.remove('show');
+      }, 3000); // Display for 3 seconds
+    }
     
+    /************** Firestore Document Editor Section **************/
     // Load document data when the "Load Document" button is clicked
     document.getElementById("loadDoc").addEventListener("click", async () => {
       const collectionName = document.getElementById("collectionName").value.trim();
       const documentName = document.getElementById("documentName").value.trim();
       if (!collectionName || !documentName) {
-        alert("Please enter both a collection and document name.");
+        showStatus("Please enter both a collection and document name.", "error");
         return;
       }
       try {
         const docRef = db.collection(collectionName).doc(documentName);
         const docSnap = await docRef.get();
         if (docSnap.exists) {
-          // Display the document data in a formatted JSON string
           document.getElementById("docData").value = JSON.stringify(docSnap.data(), null, 2);
+          showStatus("Document loaded successfully!", "success");
         } else {
-          alert("Document does not exist.");
+          showStatus("Document does not exist.", "info");
           document.getElementById("docData").value = "";
         }
       } catch (error) {
         console.error("Error fetching document:", error);
-        alert("Error loading document. Check the console for details.");
+        showStatus("Error loading document. Check the console for details.", "error");
       }
     });
     
@@ -216,37 +283,38 @@
       const collectionName = document.getElementById("collectionName").value.trim();
       const documentName = document.getElementById("documentName").value.trim();
       if (!collectionName || !documentName) {
-        alert("Please enter both a collection and document name.");
+        showStatus("Please enter both a collection and document name.", "error");
         return;
       }
       let updatedData;
       try {
-        // Parse the JSON data from the textarea
         updatedData = JSON.parse(document.getElementById("docData").value);
       } catch (error) {
-        alert("Invalid JSON format. Please fix the errors and try again.");
+        showStatus("Invalid JSON format. Please fix the errors and try again.", "error");
         return;
       }
       try {
         const docRef = db.collection(collectionName).doc(documentName);
         await docRef.set(updatedData);
-        alert("Document updated successfully!");
+        showStatus("Document updated successfully!", "success");
+        // Clear fields after successful save
+        document.getElementById("collectionName").value = "";
+        document.getElementById("documentName").value = "";
+        document.getElementById("docData").value = "";
       } catch (error) {
         console.error("Error updating document:", error);
-        alert("Error updating document. Check the console for details.");
+        showStatus("Error updating document. Check the console for details.", "error");
       }
     });
     
-    // Popup toolbar logic for the Editor's docData textarea
+    // Popup toolbar logic for the Editor's docData textarea (Document Editor)
     (function() {
       const editorTextarea = document.getElementById('docData');
       const editorToolbar = document.getElementById('editorToolbar');
       const editorBoldButton = document.getElementById('editorBoldButton');
       const editorUnderlineButton = document.getElementById('editorUnderlineButton');
       
-      // Show toolbar when text is selected in the editor textarea
       editorTextarea.addEventListener('mouseup', function(e) {
-        // Using textarea selection properties rather than window.getSelection()
         if (editorTextarea.selectionStart !== editorTextarea.selectionEnd) {
           editorToolbar.style.display = 'block';
           editorToolbar.style.top = (e.clientY + window.scrollY) + 'px';
@@ -256,33 +324,25 @@
         }
       });
       
-      // Hide toolbar when clicking outside the textarea and its buttons
       document.addEventListener('click', function(e) {
         if (e.target !== editorTextarea && e.target !== editorBoldButton && e.target !== editorUnderlineButton) {
           editorToolbar.style.display = 'none';
         }
       });
       
-      // Add bold formatting for the editor
       editorBoldButton.addEventListener('click', function() {
         wrapSelectedText(editorTextarea, '<strong>', '</strong>', editorToolbar);
       });
       
-      // Add underline formatting for the editor
       editorUnderlineButton.addEventListener('click', function() {
         wrapSelectedText(editorTextarea, '<u>', '</u>', editorToolbar);
       });
     })();
     
-    /* ----------------------- */
-    /* Quiz Adder Section */
-    /* ----------------------- */
-    
-    // Listen for Quiz form submission
+    /************** Quiz Adder Section **************/
     document.getElementById('addQuizForm').addEventListener('submit', function(e) {
       e.preventDefault();
       
-      // Get values from form fields
       const questionText = document.getElementById('question').value;
       const choiceA = document.getElementById('choiceA').value;
       const choiceB = document.getElementById('choiceB').value;
@@ -290,21 +350,34 @@
       const choiceD = document.getElementById('choiceD').value;
       const correctAnswer = document.getElementById('correctAnswer').value.trim().toUpperCase();
       
-      // Create an array for choices in order (A, B, C, D)
+      const quizCollectionName = document.getElementById('quizCollectionName').value.trim() || 'questions';
+      const quizDocumentName = document.getElementById('quizDocumentName').value.trim();
+      
       const choices = [choiceA, choiceB, choiceC, choiceD];
       
-      // Add the question to the "questions" collection in Firestore
-      db.collection('questions').add({
+      const payload = {
         question: questionText,
         choices: choices,
         correctAnswer: correctAnswer
-      })
-      .then(() => {
-        alert("Question added successfully!");
+      };
+      
+      let operation;
+      if (quizDocumentName) {
+        operation = db.collection(quizCollectionName).doc(quizDocumentName).set(payload);
+      } else {
+        operation = db.collection(quizCollectionName).add(payload);
+      }
+      
+      operation.then(() => {
+        showStatus("Question added successfully!", "success");
+        // Clear the quiz form and custom path fields after save
         document.getElementById('addQuizForm').reset();
+        document.getElementById('quizCollectionName').value = "";
+        document.getElementById('quizDocumentName').value = "";
       })
       .catch((error) => {
         console.error("Error adding document: ", error);
+        showStatus("Error adding question. Check the console for details.", "error");
       });
     });
     
@@ -315,7 +388,6 @@
       const boldButton = document.getElementById('boldButton');
       const underlineButton = document.getElementById('underlineButton');
       
-      // Show toolbar when text is selected in the question textarea
       questionTextarea.addEventListener('mouseup', function(e) {
         if (questionTextarea.selectionStart !== questionTextarea.selectionEnd) {
           toolbar.style.display = 'block';
@@ -326,19 +398,16 @@
         }
       });
       
-      // Hide toolbar when clicking outside the textarea and its buttons
       document.addEventListener('click', function(e) {
         if (e.target !== questionTextarea && e.target !== boldButton && e.target !== underlineButton) {
           toolbar.style.display = 'none';
         }
       });
       
-      // Add bold formatting for the question textarea
       boldButton.addEventListener('click', function() {
         wrapSelectedText(questionTextarea, '<strong>', '</strong>', toolbar);
       });
       
-      // Add underline formatting for the question textarea
       underlineButton.addEventListener('click', function() {
         wrapSelectedText(questionTextarea, '<u>', '</u>', toolbar);
       });
@@ -351,25 +420,86 @@
       const selectedText = textarea.value.substring(start, end);
       const newText = textarea.value.substring(0, start) + startTag + selectedText + endTag + textarea.value.substring(end);
       textarea.value = newText;
-      // Optionally, reset the selection (if desired)
       toolbarEl.style.display = 'none';
     }
-  </script>
-  
-  <!-- Google Analytics initialization -->
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
     
-    ga('create', 'UA-1656750-34', 'auto');
-    ga('require', 'linkid', 'linkid.js');
-    ga('require', 'displayfeatures');
-    ga('send', 'pageview');
+    /************** Upload Quiz Questions Section **************/
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const uploadButton = document.getElementById('uploadButton');
+    
+    // Trigger file selection when dropZone is clicked
+    dropZone.addEventListener('click', () => {
+      fileInput.click();
+    });
+    
+    // Highlight dropZone when file is dragged over it
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+    
+    dropZone.addEventListener('dragleave', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+    });
+    
+    // Handle dropped file
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      if (e.dataTransfer.files.length > 0) {
+        fileInput.files = e.dataTransfer.files;
+      }
+    });
+    
+    // Upload button event handler
+    uploadButton.addEventListener('click', function() {
+      if (fileInput.files.length === 0) {
+        showStatus("Please select a JSON file first.", "error");
+        return;
+      }
+      // Get the collection name from the new input (default "Maths")
+      const uploadCollectionName = document.getElementById('uploadCollectionName').value.trim() || "Maths";
+      
+      const file = fileInput.files[0];
+      const reader = new FileReader();
+      reader.onload = async function(event) {
+        try {
+          const jsonData = JSON.parse(event.target.result);
+          if (!Array.isArray(jsonData)) {
+            throw new Error("Invalid JSON format. Expected an array of questions.");
+          }
+          
+          // Process each question in order
+          for (let index = 0; index < jsonData.length; index++) {
+            const item = jsonData[index];
+            if (!item.question || !Array.isArray(item.choices) || !item.correctAnswer) {
+              console.error(`Skipping invalid question at index ${index}`);
+              continue;
+            }
+            
+            // Format choices (remove leading "a)", "b)", etc.)
+            const formattedChoices = item.choices.map(choice => choice.replace(/^[a-d]\)\s*/, ""));
+            // Use zero-padded IDs: "001", "002", "003", etc.
+            const docId = (index + 1).toString().padStart(3, '0');
+            await db.collection(uploadCollectionName).doc(docId).set({
+              question: item.question,
+              choices: formattedChoices,
+              correctAnswer: item.correctAnswer.toUpperCase()
+            });
+            console.log(`Question ${index + 1} (ID: ${docId}) added successfully.`);
+          }
+          showStatus("✅ All questions uploaded successfully!", "success");
+          // Clear file input after upload
+          fileInput.value = "";
+        } catch (error) {
+          console.error("Error processing file: ", error);
+          showStatus("❌ Error uploading questions. Check console for details.", "error");
+        }
+      };
+      reader.readAsText(file);
+    });
   </script>
-  
-  <!-- (Optional) Additional analytics or tracking if needed -->
-  <iframe allow="join-ad-interest-group" data-tagging-id="G-NQJ8QBF8ET" data-load-time="1738849444415" height="0" width="0" src="https://td.doubleclick.net/td/ga/rul?tid=G-NQJ8QBF8ET&amp;gacid=444666590.1731655253&amp;gtm=45je5240v9123946073za200&amp;dma=0&amp;gcd=13l3l3l3l2l1&amp;npa=0&amp;pscdl=noapi&amp;aip=1&amp;fledge=1&amp;frm=0&amp;tag_exp=102067808~102081485~102123608~102482433~102539968~102556565~102558064~102587590&amp;z=1854701106" style="display: none; visibility: hidden;"></iframe>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Grade 6 Ministry - LT Quiz</title>
+  <title>LT Quiz</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -111,6 +111,7 @@
   color: #f39c12; /* Change color on hover */
 }
 
+
   </style>
 </head>
 <body>
@@ -138,41 +139,22 @@
 
   <section class="py-5">
     <div class="container">
-      <h2 class="text-center mb-5">Grade 6 - Choose Subject</h2>
+      <h2 class="text-center mb-5">Choose quiz</h2>
       <div class="row">
         <div class="col-md-12">
           <!-- Content View Style Cards -->
-          <div class="content-view" onclick="maths()">
+          <div class="content-view" onclick="ministry()">
             <img src="folder.png" alt="Maths" class="folder-icon">
-            <div class="folder-text">Maths (AO)</div>
+            <div class="folder-text">2016/2024 Grade 6 Ministry(AO)</div>
           </div>
-          <div class="content-view" onclick="science()">
-            <img src="folder.png" alt="Science" class="folder-icon">
-            <div class="folder-text">Science (AO)</div>
-          </div>
-          <div class="content-view" onclick="english()">
-            <img src="folder.png" alt="English" class="folder-icon">
-            <div class="folder-text">English</div>
-          </div>
-          <div class="content-view" onclick="oromo()">
-            <img src="folder.png" alt="Afaan Oromo" class="folder-icon">
-            <div class="folder-text">Afaan Oromo</div>
-          </div>
-          <div class="content-view" onclick="civics()">
-            <img src="folder.png" alt="Civics" class="folder-icon">
-            <div class="folder-text">Civics/Gada (AO)</div>
-          </div>
-        </div>
-      </div>
-    </div>
+
   </section>
 
   <footer class="footer">
     <div class="container">
       <div class="text-center">
         <small>
-          © 2016-2024 Oromia Education Bureau (OEB)
-          Grade 6 Ministry Exam Questions<br>
+          © 2016-2024 Oromia Education Bureau (OEB) <br>
           Used under educational fair use policy<br>
           LT Quiz is not affiliated with OEB
           <br><br>
@@ -182,28 +164,18 @@
   </footer>
 
   <script>
-    function back() {
-      window.location.href = '/quiz'; 
-    }
-
     function home() {
       window.location.href = '/'; 
     }
-    function science() {
-      window.location.href = '/science'; 
+
+    function back() {
+      window.location.href = '/'; 
     }
-    function maths() {
-      window.location.href = '/maths'; 
+
+    function ministry() {
+      window.location.href = '/ministry'; 
     }
-    function english() {
-      window.location.href = '/english'; 
-    }
-    function oromo() {
-      window.location.href = '/oromo'; 
-    }
-    function civics() {
-      window.location.href = '/civics'; 
-    }
+
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

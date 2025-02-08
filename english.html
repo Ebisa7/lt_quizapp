@@ -1,345 +1,318 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta charset="UTF-8">
-  <title>English - Lt quiz</title>
-  <!-- Firebase Compat SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore-compat.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>English Quiz - LT Quiz</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <style>
-     /* Overall container styling */
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #fcf0e8;
-      padding: 20px;
-      margin: 0;
-    }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      margin-top: 40px;
-      background: #fcf0e8;
-      padding: 30px;
-      border-radius: 8px;
-
-    }
-    h1 {
-      text-align: center;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #fff4ec;
       color: #333;
-      margin-bottom: 100px;
-      margin-top: 30px;
-      font-size: 27px;
-    }
-    .question-block {
-      margin-bottom: 30px;
-      padding: 15px;
-      background: #fcf4ef;
-      border: 1px solid #ddd;
-      border-radius: 13px;
-    }
-    .question {
-      margin-bottom: 15px;
-      font-size: 20px;
-      color: #444;
-    }
-    /* Modal Popup styling */
-    .modal {
-      display: none; /* Hidden by default */
-      position: fixed;
-      z-index: 100;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-    .modal-content {
-      background: #fcf0e8;
-      margin: 10% auto;
-      padding: 30px;
-      border-radius: 8px;
-      max-width: 200px;
-      text-align: center;
-      position: relative;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    .modal-content img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 5px;
-    }
-    .modal-content h1 {
-      margin: 20px 0 10px;
-      font-size: 24px;
-      color: black;
-    }
-    .modal-content p {
-      font-size: 18px;
-      color: #333;
-      margin-bottom: 20px;
-    }
-    .close-modal {
-      padding: 10px 20px;
-      background: #784628;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .close-modal:hover {
-      background: #925630;
-    }
-    button.submit-btn {
-      display: block;
-      margin: 20px auto;
-      padding: 12px 30px;
-      background-color: #784628;
-      color: #fff;
-      border: none;
-      border-radius: 50px;
-      font-size: 18px;
-      cursor: pointer;
-    }
-    button.submit-btn:hover {
-      background: #925630;
     }
 
-    /* Custom Checkbox CSS from the provided snippet */
-    @supports (-webkit-appearance: none) or (-moz-appearance: none) {
-      .checkbox-wrapper-13 input[type=checkbox] {
-        --active: #275EFE;
-        --active-inner: #fff;
-        --focus: 2px rgba(39, 94, 254, .3);
-        --border: #BBC1E1;
-        --border-hover: #275EFE;
-        --background: #fff;
-        --disabled: #F6F8FF;
-        --disabled-inner: #E1E6F9;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        height: 21px;
-        outline: none;
-        display: inline-block;
-        vertical-align: top;
-        position: relative;
-        margin: 0;
-        cursor: pointer;
-        border: 1px solid var(--bc, var(--border));
-        background: var(--b, var(--background));
-        transition: background 0.3s, border-color 0.3s, box-shadow 0.2s;
-      }
-      .checkbox-wrapper-13 input[type=checkbox]:after {
-        content: "";
-        display: block;
-        left: 0;
-        top: 0;
-        position: absolute;
-        transition: transform var(--d-t, 0.3s) var(--d-t-e, ease), opacity var(--d-o, 0.2s);
-      }
-      .checkbox-wrapper-13 input[type=checkbox]:checked {
-        --b: var(--active);
-        --bc: var(--active);
-        --d-o: .3s;
-        --d-t: .6s;
-        --d-t-e: cubic-bezier(.2, .85, .32, 1.2);
-      }
-      .checkbox-wrapper-13 input[type=checkbox]:disabled {
-        --b: var(--disabled);
-        cursor: not-allowed;
-        opacity: 0.9;
-      }
-      .checkbox-wrapper-13 input[type=checkbox]:disabled:checked {
-        --b: var(--disabled-inner);
-        --bc: var(--border);
-      }
-      .checkbox-wrapper-13 input[type=checkbox]:disabled + label {
-        cursor: not-allowed;
-      }
-      .checkbox-wrapper-13 input[type=checkbox]:hover:not(:checked):not(:disabled) {
-        --bc: var(--border-hover);
-      }
-      .checkbox-wrapper-13 input[type=checkbox]:focus {
-        box-shadow: 0 0 0 var(--focus);
-      }
-      .checkbox-wrapper-13 input[type=checkbox]:not(.switch) {
-        width: 21px;
-      }
-      .checkbox-wrapper-13 input[type=checkbox]:not(.switch):after {
-        opacity: var(--o, 0);
-      }
-      .checkbox-wrapper-13 input[type=checkbox]:not(.switch):checked {
-        --o: 1;
-      }
-      .checkbox-wrapper-13 input[type=checkbox] + label {
-        display: inline-block;
-        vertical-align: middle;
-        cursor: pointer;
-        margin-left: 4px;
-      }
-      .checkbox-wrapper-13 input[type=checkbox]:not(.switch) {
-        border-radius: 7px;
-      }
-      .checkbox-wrapper-13 input[type=checkbox]:not(.switch):after {
-        width: 5px;
-        height: 9px;
-        border: 2px solid var(--active-inner);
-        border-top: 0;
-        border-left: 0;
-        left: 7px;
-        top: 4px;
-        transform: rotate(var(--r, 20deg));
-      }
-      .checkbox-wrapper-13 input[type=checkbox]:not(.switch):checked {
-        --r: 43deg;
-      }
-    }
-    .checkbox-wrapper-13 * {
-      box-sizing: inherit;
-    }
-    .checkbox-wrapper-13 *:before,
-    .checkbox-wrapper-13 *:after {
-      box-sizing: inherit;
-    }
-    /* Added spacing between checkboxes */
-    .checkbox-wrapper-13 {
-      margin-bottom: 8px;
-    }
-    
-        .back {
-          position: fixed;
-    top: 150px;
-    border: none;
-    left: 30px;
-    background: none;
-    color: rgb(0, 0, 0);
-    padding: 10px 15px;
-    border-radius: 50px;
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 20px;
-    }
+/* Navbar Styles */
+.navbar {
+  background-color: #fff4ec; /* Light background */
+  padding: 10px 0;
+  color: black
 
-    .back:hover, .download-btn:hover {
-      color: #f39c12;
-    }
-    
-    .download-btn {
-    position: fixed;
-    top: 150px;
-    right: 30px;
-    background: none;
-    color: rgb(0, 0, 0);
-    padding: 10px 15px;
-    border-radius: 20px;
-    text-decoration: none;
-    font-size: 20px;
+}
+
+.navbar .navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.navbar .navbar-brand img {
+  height: 60px;
+  font-size: 10px;
+}
+
+.navbar-text {
+  font-size: 22px;
+  color: #000000;
+  font-weight: bold;
 }
 
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Arial', sans-serif;
+
+.navbar .navbar-nav {
+  margin-left: auto;
+}
+
+.navbar .navbar-nav .btn {
+  color: #333;
+  font-weight: 500;
+}
+
+.navbar .navbar-nav .btn:hover {
+  color: #f39c12;
+  background-color: transparent;
+}
+
+/* Navbar Toggle Button for Small Screens */
+.navbar-toggler {
+  border-color: #f39c12;
+}
+
+.navbar-toggler-icon {
+  background-color: #f39c12;
+}
+
+/* Active Link Styles */
+.navbar-nav .nav-item.active .nav-link {
+  color: #f39c12;
+  font-weight: 600;
+}
+
+
+
+    .quiz-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 20px;
+}
+
+.quiz-container img {
+  display: block; /* Makes the image block-level */
+
+  margin-left: auto; /* Centers the image horizontally */
+  margin-right: auto; /* Centers the image horizontally */
+}
+
+
+    .question-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: black;
-      background: #fcf0e8;
-      padding: 15px 30px;
+    .question-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      color: #2c3e50;
     }
-    .navbar .logo {
-      display: flex;
-      cursor: pointer;
-      align-items: center;
+
+    .form-check-input:checked {
+      background-color: #f39c12;
+      border-color: #f39c12;
     }
-    .navbar .logo img {
-      height: 80px;
-      margin-right: 10px;
+
+    .submit-btn {
+      background-color: #f39c12;
+      border: none;
+      padding: 12px 30px;
+      font-weight: 600;
+      width: 100%;
+      max-width: 200px;
     }
-    .navbar .logo h1 {
-      color: black;
-      align-items: center;
-      font-size: 23px;
-      margin: 0 1px;
+
+    .submit-btn:hover {
+      background-color: #ffb43a;
+
     }
-    .navbar .nav-links {
-      list-style: none;
-      display: flex;
+
+    .construction-block {
+      background: #fff4ec;
+      border-left: 4px solid #f39c12;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
     }
-    .navbar .nav-links li {
-      margin: 0 15px;
+
+    .construction-block img {
+      max-width: 100%;
+      height: auto;
+      margin-top: 15px;
+      border-radius: 8px;
     }
-    .navbar .nav-links a {
-      color: black;
-      text-decoration: none;
-      font-size: 18px;
-      transition: 0.3s;
-    }
-    .navbar .nav-links a:hover {
-      color: #f39c12;
-    }
+    .loading-container {
+  display: flex;
+  justify-content: center; /* Centers the content horizontally */
+  align-items: center; /* Centers the content vertically */
+  gap: 10px; /* Adds some space between the spinner and the text */
+}
+
+.spinner {
+  border: 2px solid #17273b;
+  border-top: 2px solid #ffffff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-weight: bold;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+/* Container for both buttons */
+.buttons-container {
+  position: relative;
+  width: 100%;
+  height: 60px; /* Adjust height as needed */
+}
+
+/* Back button (top left) */
+.back {
+  position: absolute;
+  top: 0; /* Position at the top */
+  left: 0; /* Position at the left */
+  border: none;
+  background: none;
+  color: rgb(0, 0, 0);
+  padding: 10px 15px;
+  border-radius: 50px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 20px;
+  z-index: 9999; /* Ensure it stays above other elements */
+}
+
+/* Download button (top right) */
+.download-btn {
+  position: absolute;
+  top: 0; /* Position at the top */
+  right: 0; /* Position at the right */
+  border: none;
+  background: none;
+  color: rgb(0, 0, 0);
+  padding: 10px 15px;
+  border-radius: 50px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 20px;
+  z-index: 9999; /* Ensure it stays above other elements */
+}
+
+/* Hover effects */
+.back:hover, .download-btn:hover {
+  color: #f39c12; /* Change color on hover */
+}
+
+.footer {
+    background-color: #fcf0e8 !important;
+    border-top: 1px solid #eee4dd;
+    margin-top: auto;
+    width: 100%;
+  }
+
+
+
+
   </style>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
-  <div class="navbar">
-    <div class="logo">
-      <img onclick="home()" src="logo.png" alt="Site Logo">
-      <h1>Quiz</h1>
-    </div>
-    <ul class="nav-links">
-      <li><a href="index.html"><i class="fa-solid fa-home"></i> Home</a></li>
-    </ul>
-  </div>
 
-    
-    
-
-  <a href="https://docs.google.com/document/d/1s9116IONGJnUJOgxLbeRIodKRpaem-kp/export?format=pdf" 
-   class="download-btn" 
-   download>
-    <i class="fa-solid fa-download"></i>
-</a>
-   <div onclick="back()" class="back"><button class="back"><i class="fa-solid fa-arrow-left"></i>Back</button></div>
+  <nav class="navbar">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img src="logo.png" alt="Logo" height="50" onclick="home()">
+        <span class="navbar-text">Quiz</span>
+      </a>
 
 
-  <div class="container">
-    <h1>English Grade 6 Ministry (2016/2024)</h1>
-    <form id="quizForm">
-      <div id="quizContainer">
-        <!-- Quiz questions will be injected here -->
+      
+        
       </div>
-      <button type="submit" class="submit-btn">Submit Quiz</button>
+    </div>
+  </nav>
+<div>
+
+  <div class="buttons-container">
+    <button onclick="back()" class="back"> 
+      <i class="fas fa-arrow-left"> </i> Back
+    </button>
+    <div class="download-btn">
+      <a href="https://docs.google.com/document/d/1s9116IONGJnUJOgxLbeRIodKRpaem-kp/export?format=pdf" 
+         class="btn-link text-dark" download>
+        <i class="fas fa-download"></i> Download
+      </a>
+    </div>
+  </div>
+  
+  
+
+  <div class="quiz-container"> 
+    <h2 class="text-center mb-4 fw-bold">English Grade 6 Ministry</h2>
+    
+    <form id="quizForm">
+      <div id="quizContainer" class="mb-4">
+        <div class="loading-container">
+          <div class="spinner"></div>
+          <span class="loading-text">Loading...</span>
+        </div>
+        <!-- Questions will be injected here -->
+      </div>
+      
+      <div id="quizContainer" class="mb-4">
+        <!-- Questions will be injected here -->
+      </div>
+      
+      <div class="text-center">
+        <button type="submit" class="btn submit-btn text-white">Submit Quiz</button>
+      </div>
     </form>
   </div>
 
-  <!-- Modal Popup for Result -->
-  <div id="resultModal" class="modal">
-    <div class="modal-content">
-      <img src="https://cdn-icons-png.flaticon.com/128/10792/10792513.png" alt="Result Image">
-      <h1>Quiz Completed!</h1>
-      <p id="resultText"></p>
-      <button class="close-modal" id="closeModal">OK</button>
+  <!-- Bootstrap Modal -->
+  <div class="modal fade" id="resultModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center py-4">
+          <img src="https://cdn-icons-png.flaticon.com/128/10792/10792513.png" 
+               alt="Result" 
+               class="mb-3"
+               style="width: 100px;">
+          <h3 class="mb-3">Quiz Completed!</h3>
+          <p id="resultText" class="lead"></p>
+          <button type="button" class="btn btn-warning text-white" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div>
     </div>
   </div>
 
+
+  <footer class="footer">
+    <div class="container">
+      <div class="text-center">
+        <small>
+          © 2016-2024 Oromia Education Bureau (OEB)
+          Grade 6 Ministry Exam Questions<br>
+          Used under educational fair use policy<br>
+          LT Quiz is not affiliated with OEB
+          <br><br>
+        </small>
+      </div>
+    </div>
+  </footer>
+
+
+
   <script>
-
-
-function back() {
-      window.location.href = '/ministry'; 
+    function back() {
+      window.location.href = '/ministry';
     }
 
     function home() {
-      window.location.href = '/'; 
+      window.location.href = '/';
     }
 
     // Firebase configuration
@@ -347,10 +320,9 @@ function back() {
       apiKey: "AIzaSyDelPBnpY0xv-_ShgWreMZpld_SUWdRwJk",
       authDomain: "lt-website-bf509.firebaseapp.com",
       projectId: "lt-website-bf509",
-      storageBucket: "lt-website-bf509.firebasestorage.app",
+      storageBucket: "lt-website-bf509.appspot.com",
       messagingSenderId: "43884867628",
-      appId: "1:43884867628:web:617a17c06d37b014a86189",
-      measurementId: "G-XL54K0J9BX"
+      appId: "1:43884867628:web:617a17c06d37b014a86189"
     };
 
     // Initialize Firebase
@@ -359,8 +331,6 @@ function back() {
 
     let quizData = [];
 
-    // Define construction sections: { startIndex, endIndex, content }
-    // Define construction sections: { startIndex, endIndex, content }
     const constructionSections = [
   { startIndex: 0, endIndex: 1, content: "<u>ITEMS 1-3 ARE BASED ON THE PASSAGE BELOW. READ IT AND CHOOSE THE CORRECT ANSWER.</u> <br><br> The sun gives us light. So it keeps us warm and gives us heat. My mother dries our clothes in the sun. Plants make their food with help of sunlight. When the sun rises, it becomes day and when it sets it becomes night. The sun rises in the East and sets in the West. If there is no sun, it will be dark everywhere. So I like the sun very much." },
   { startIndex: 3, endIndex: 4, content: "<u>FOR ITEMS 4-14 CHOOSE THE CORRECT ALTERNATIVE THAT ANSWERS THE QUESTION.</u>" },
@@ -372,105 +342,74 @@ function back() {
   { startIndex: 38, endIndex: 39, content: "<u>ITEMS 39 AND 40 ARE ABOUT PARAGRAPH WRITING. READ THE ITEM CAREFULLY AND CHOOSE THE CORRECT ALTERNATIVE </u>" },
 ];
 
-    // Load quiz questions from Firestore
     const loadQuiz = () => {
       db.collection('English').get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          quizData.push(doc.data());
-        });
-        renderQuiz();
-      })
-      .catch(error => {
-        console.error("Error loading quiz questions: ", error);
-      });
+        .then(querySnapshot => {
+          quizData = querySnapshot.docs.map(doc => doc.data());
+          renderQuiz();
+        })
+        .catch(error => console.error("Error loading quiz:", error));
     };
 
-    // Render the quiz questions and choices using the custom checkbox structure
     const renderQuiz = () => {
       const quizContainer = document.getElementById('quizContainer');
       let html = '';
 
       quizData.forEach((question, index) => {
-        // Check if there is a construction section before this question
         constructionSections.forEach(section => {
           if (index === section.startIndex) {
-            html += `<div class="construction-block">
-                       <p><strong>${section.content}</strong></p>
-                     </div>`;
+            html += `
+              <div class="construction-block">
+                <div class="fw-bold mb-2">${section.content}</div>
+              </div>
+            `;
           }
         });
 
-        html += `<div class="question-block">
-                    <div class="question">${index + 1}. ${question.question}</div>
-                    <div class="choices">`;
-        
-        // For each choice (A, B, C, D), use the provided checkbox structure.
-        const choiceLetters = ['A', 'B', 'C', 'D'];
-        question.choices.forEach((choiceText, i) => {
-          const choiceLetter = choiceLetters[i];
-          const checkboxId = `q${index}-choice${choiceLetter}`;
-          html += `<div class="checkbox-wrapper-13">
-                     <input id="${checkboxId}" type="checkbox" name="q${index}" value="${choiceLetter}">
-                     <label for="${checkboxId}">${choiceLetter}. ${choiceText}</label>
-                   </div>`;
+        html += `
+          <div class="question-card">
+            <div class="question-text">${index + 1}. ${question.question}</div>
+            <div class="choices">
+        `;
+
+        question.choices.forEach((choice, i) => {
+          html += `
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="radio" 
+                     name="q${index}" 
+                     id="q${index}-${i}"
+                     value="${String.fromCharCode(65 + i)}">
+              <label class="form-check-label" for="q${index}-${i}">
+                ${String.fromCharCode(65 + i)}. ${choice}
+              </label>
+            </div>
+          `;
         });
 
         html += `</div></div>`;
-
-        // Check if the section ends after this question
-        constructionSections.forEach(section => {
-          if (index === section.endIndex) {
-            html += `<div class="construction-end"><hr></div>`;
-          }
-        });
       });
 
       quizContainer.innerHTML = html;
-
-      // Add event listeners so that only one checkbox per question can be selected.
-      quizData.forEach((question, index) => {
-        const checkboxes = document.querySelectorAll(`input[name="q${index}"]`);
-        checkboxes.forEach(checkbox => {
-          checkbox.addEventListener('click', function() {
-            checkboxes.forEach(box => {
-              if (box !== this) {
-                box.checked = false;
-              }
-            });
-          });
-        });
-      });
     };
 
-    // Function to show modal with result
-    const showResultModal = (score, total) => {
-      const modal = document.getElementById('resultModal');
-      const resultText = document.getElementById('resultText');
-      resultText.innerText = `You scored ${score} out of ${total}`;
-      modal.style.display = 'block';
-    };
-
-    // Close modal when OK is clicked
-    document.getElementById('closeModal').addEventListener('click', () => {
-      document.getElementById('resultModal').style.display = 'none';
-    });
-
-    // Handle quiz submission
-    document.getElementById('quizForm').addEventListener('submit', function(e) {
+    document.getElementById('quizForm').addEventListener('submit', e => {
       e.preventDefault();
       let score = 0;
+      
       quizData.forEach((question, index) => {
         const selected = document.querySelector(`input[name="q${index}"]:checked`);
-        if (selected && selected.value === question.correctAnswer) {
-          score++;
-        }
+        if (selected && selected.value === question.correctAnswer) score++;
       });
-      showResultModal(score, quizData.length);
+
+      const resultModal = new bootstrap.Modal('#resultModal');
+      document.getElementById('resultText').textContent = 
+        `You scored ${score} out of ${quizData.length}`;
+      resultModal.show();
     });
 
-    // Load the quiz when the page loads
-    window.onload = loadQuiz;
+    window.addEventListener('load', loadQuiz);
   </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
