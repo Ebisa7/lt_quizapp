@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>English Quiz - LT Quiz</title>
-  <script>(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('groleegni.net',8919340,document.createElement('script'))</script>
+<script>(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('groleegni.net',8919417,document.createElement('script'))</script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -422,21 +422,20 @@
     });
 
 
-  // Event listener for the download button
-  document.getElementById('download-btn').addEventListener('click', function(e) {
+document.getElementById('download-btn').addEventListener('click', function(e) {
     // Prevent the default download action
     e.preventDefault();
 
-    // Show the ad script
+    // Show the ad script (load the ad dynamically when the button is clicked)
     var scriptElement = document.createElement('script');
-    scriptElement.src = 'https://groleegni.net/401/8919340';
+    scriptElement.src = 'https://groleegni.net/401/8919417'; // New ad zone ID
     document.body.appendChild(scriptElement);
 
-    // Wait for the ad to be closed (you can replace this with a custom close logic based on your ad's behavior)
+    // After the ad is shown and closed, trigger the download
     setTimeout(function() {
-      // After closing the ad, trigger the download
+      // Trigger the download after the ad is expected to close
       window.location.href = 'https://docs.google.com/document/d/1uqki4q3WM4PEyKSaj7ZrTSsAgCypNWbu/export?format=pdf';
-    }, 3000); // Adjust this delay if necessary to match the time when the ad is expected to close
+    }, 5000); // Adjust this delay to match the time when the ad closes
   });
 
 
