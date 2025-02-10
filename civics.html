@@ -46,61 +46,80 @@
         button:hover {
             background-color: #45a049;
         }
+        #successMessage {
+            display: none;
+            color: #28a745; /* Green color */
+            margin-top: 20px;
+        }
+        #setEmojiBtn {
+            display: none;
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
         <h2>Set Your Telegram Emoji Status</h2>
-        <p>Click the button below to set your emoji status in Telegram.</p>
-        <button id="setStatus">Set Emoji Status now</button>
+        <p>Click the button below to request access and set your emoji status in Telegram.</p>
+
+        <!-- Button to request emoji status access -->
+        <button id="requestAccessBtn">Request Access to Set Emoji Status</button>
+
+        <!-- Button to set emoji status -->
+        <button id="setEmojiBtn">Set Emoji Status</button>
+
+        <!-- Success message -->
+        <div id="successMessage">Permission granted! Now you can set the emoji status.</div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready(); // Ensure the Mini App is initialized
 
-        let permissionGranted = false; // Track permission status
+        const requestAccessBtn = document.getElementById("requestAccessBtn");
+        const setEmojiBtn = document.getElementById("setEmojiBtn");
+        const successMessage = document.getElementById("successMessage");
+
+        const customEmojiId = "5861533974148419995"; // Custom emoji ID
+        const duration = 3600; // Optional: Set status duration (in seconds)
+
+        let permissionGranted = false;
 
         // Function to set emoji status
         function setEmojiStatus() {
-            const customEmojiId = "5861533974148419995"; // Custom emoji ID
-            const duration = 3600; // Optional: Set status duration (in seconds)
-
-            console.log("Setting emoji status..."); // Debugging log
-
-            // Setting emoji status in Telegram
             tg.setEmojiStatus({
                 custom_emoji_id: customEmojiId,
                 duration: duration,
             }).then(() => {
-                console.log("Emoji status set successfully!"); // Debugging log
-                alert("Emoji status set successfully!"); // Notify user
+                console.log("Emoji status set successfully!");
+                alert("Emoji status set successfully!");
             }).catch(err => {
-                console.error("Error setting emoji status:", err); // Error log
-                alert("Error setting emoji status: " + err.message); // Notify user
+                console.error("Error setting emoji status:", err);
+                alert("Error setting emoji status: " + err.message);
             });
         }
 
-        // Event listener for the button
-        document.getElementById("setStatus").addEventListener("click", function() {
-            console.log("Button clicked! Checking permission..."); // Debugging log
+        // Event listener for requesting emoji status access
+        requestAccessBtn.addEventListener("click", function() {
+            console.log("Requesting emoji status access...");
+            tg.requestEmojiStatusAccess().then(function() {
+                console.log("Permission granted!");
+                successMessage.style.display = "block"; // Show the success message
+                requestAccessBtn.style.display = "none"; // Hide the access request button
+                setEmojiBtn.style.display = "block"; // Show the set emoji button
+                permissionGranted = true;
+            }).catch(function(error) {
+                console.error("Permission denied:", error.message);
+                alert("Permission denied: " + error.message);
+            });
+        });
 
-            if (!permissionGranted) {
-                // Request emoji status access
-                tg.requestEmojiStatusAccess().then(function() {
-                    // Permission granted, update the status and set permission flag
-                    permissionGranted = true; // Permission granted
-                    console.log("Permission granted!"); // Debugging log
-                    setEmojiStatus(); // Open the emoji status dialog
-                }).catch(function(error) {
-                    // Handle permission denial
-                    console.error("Permission denied:", error.message); // Debugging log
-                    alert("Permission denied: " + error.message);
-                });
+        // Event listener for setting emoji status
+        setEmojiBtn.addEventListener("click", function() {
+            if (permissionGranted) {
+                setEmojiStatus(); // Set the emoji status
             } else {
-                // If permission is already granted, just set the emoji status
-                setEmojiStatus();
+                alert("You need to grant permission first.");
             }
         });
     </script>
