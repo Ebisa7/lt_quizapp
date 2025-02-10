@@ -281,55 +281,9 @@
 </div>
 
 
- <!-- Adblocker Popup -->
-<div id="adblock-popup" class="modal fade" tabindex="-1" aria-labelledby="adblockModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="adblockModalLabel">Please Disable Your AdBlocker</h5>
-      </div>
-      <div class="modal-body">
-        <p>🚀 LT Quiz is free because of ads! Please disable your adblocker to support us. Your support helps us keep providing quality quizzes for free. ❤️</p>
-        <p>✅ Refresh the page after disabling AdBlock.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" onclick="location.reload()">I Disabled It</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <script>
-  // Adblocker detection function
-  function detectAdBlock() {
-    // Create an ad element (adblockers block this element)
-    let adTest = document.createElement("div");
-    adTest.className = "adsbygoogle";
-    adTest.style.position = "absolute";
-    adTest.style.top = "-9999px"; // Push off-screen to avoid disrupting layout
-    document.body.appendChild(adTest);
 
-    // Check after a short delay if the ad is blocked (display: none)
-    setTimeout(() => {
-      if (getComputedStyle(adTest).display === "none") {
-        // Adblocker detected
-        showAdblockerPopup();
-      }
-      document.body.removeChild(adTest); // Cleanup the test element
-    }, 500); // Short delay for detection
-  }
-
-  // Show the adblocker popup
-  function showAdblockerPopup() {
-    let adblockModal = new bootstrap.Modal(document.getElementById('adblock-popup'), {
-      backdrop: 'static', // Prevent closing the modal by clicking outside
-      keyboard: false      // Prevent closing the modal by pressing Escape
-    });
-    adblockModal.show();
-  }
-
-  // Always run the adblock detection in the background
-  detectAdBlock();
 
 
 
