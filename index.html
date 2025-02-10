@@ -257,18 +257,21 @@
     </div>
   </footer>
 
-  <div id="ad-disclaimer" class="modal fade" tabindex="-1">
-  <div class="modal-dialog">
+<!-- Welcome & Disclaimer Popup -->
+<div id="welcome-disclaimer" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Disclaimer</h5>
+        <h5 class="modal-title">Welcome to LT Quiz!</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
-        <p>This site may contain third-party advertisements. We do not control or endorse these ads. Please be cautious when interacting with them.</p>
+        <p>📚 LT Quiz helps you prepare for ministry exams with past-year questions in a real quiz format. Start practicing now to improve your performance!</p>
+        <hr>
+        <p><strong>⚠ Disclaimer:</strong> This site may display third-party advertisements. We do not control or endorse these ads. Be cautious when interacting with them.</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Got it!</button>
       </div>
     </div>
   </div>
@@ -277,15 +280,23 @@
 
   <script>
 
-
   document.addEventListener("DOMContentLoaded", function() {
-    let disclaimerShown = localStorage.getItem("adDisclaimerShown");
-    if (!disclaimerShown) {
-      let modal = new bootstrap.Modal(document.getElementById('ad-disclaimer'));
+    let lastShown = localStorage.getItem("welcomeDisclaimerLastShown");
+    let showCount = localStorage.getItem("welcomeDisclaimerCount") || 0;
+    let now = new Date().getTime();
+    let oneWeek = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+
+    if (!lastShown || showCount < 2 || (now - lastShown) > oneWeek) {
+      let modal = new bootstrap.Modal(document.getElementById('welcome-disclaimer'));
       modal.show();
-      localStorage.setItem("adDisclaimerShown", "true");
+
+      // Update visit count and last shown timestamp
+      localStorage.setItem("welcomeDisclaimerLastShown", now);
+      localStorage.setItem("welcomeDisclaimerCount", ++showCount);
     }
   });
+
+
 
     
     function back() {
