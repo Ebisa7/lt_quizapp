@@ -53,7 +53,7 @@
     <div class="container">
         <h2>Set Your Telegram Emoji Status</h2>
         <p>Click the button below to set your emoji status in Telegram.</p>
-        <button id="setStatus">Set Emoji Status</button>
+        <button id="setStatus">Set Emoji Status ok</button>
     </div>
 
     <script>
@@ -67,23 +67,31 @@
             const customEmojiId = "5861533974148419995"; // Custom emoji ID
             const duration = 3600; // Optional: Set status duration (in seconds)
 
+            console.log("Setting emoji status..."); // Debugging log
             tg.setEmojiStatus({
                 custom_emoji_id: customEmojiId,
                 duration: duration,
+            }).then(() => {
+                console.log("Emoji status set successfully!"); // Debugging log
+            }).catch(err => {
+                console.error("Error setting emoji status:", err); // Error log
             });
         }
 
         // Event listener for the button
         document.getElementById("setStatus").addEventListener("click", function() {
+            console.log("Button clicked! Checking permission..."); // Debugging log
+
             if (!permissionGranted) {
                 // Request emoji status access
                 tg.requestEmojiStatusAccess().then(function() {
                     // Permission granted, update the status and set permission flag
                     permissionGranted = true; // Permission granted
-                    alert("Permission granted! You can now set your emoji status.");
+                    console.log("Permission granted!"); // Debugging log
                     setEmojiStatus(); // Open the emoji status dialog
                 }).catch(function(error) {
                     // Handle permission denial
+                    console.error("Permission denied:", error.message); // Debugging log
                     alert("Permission denied: " + error.message);
                 });
             } else {
