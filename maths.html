@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AdBlock Detection</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 50px;
+    }
+    .message {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .enabled {
+      color: red;
+    }
+    .disabled {
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <h1>AdBlock Detection</h1>
+  <div id="adblock-message" class="message"></div>
+
+  <script>
+    // Function to detect AdBlock
+    function detectAdBlock() {
+      // Create an ad-like element
+      let testAd = document.createElement('div');
+      testAd.innerHTML = '&nbsp;';
+      testAd.className = 'adsbox'; // Common ad class name
+      testAd.style.position = 'absolute';
+      testAd.style.top = '-9999px'; // Off-screen so it doesn't affect layout
+      document.body.appendChild(testAd);
+
+      // Check if ad is blocked
+      setTimeout(() => {
+        const isAdBlocked = getComputedStyle(testAd).display === 'none'; // Check if it's hidden
+        const message = document.getElementById('adblock-message');
+        
+        if (isAdBlocked) {
+          message.textContent = 'AdBlock is enabled!';
+          message.classList.add('enabled');
+          message.classList.remove('disabled');
+        } else {
+          message.textContent = 'AdBlock is disabled!';
+          message.classList.add('disabled');
+          message.classList.remove('enabled');
+        }
+
+        document.body.removeChild(testAd); // Remove test ad after checking
+      }, 100);
+    }
+
+    // Run the detection function when the page loads
+    window.onload = detectAdBlock;
+  </script>
+</body>
+</html>
