@@ -342,6 +342,19 @@ autoScroll();
         Telegram.WebApp.setHeaderColor("#fff4ec"); // Set the Telegram header color
       }
     });
+
+
+    const tg = window.Telegram.WebApp;
+
+    tg.ready();
+
+    // Hide the back button on index.html
+    tg.BackButton.hide();
+
+      if (tg) {
+            tg.expand();
+            
+        }
   </script>
 
 </body>
