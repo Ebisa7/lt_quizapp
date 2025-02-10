@@ -52,27 +52,45 @@
 
     <div class="container">
         <h2>Set Your Telegram Emoji Status</h2>
-        <p>Click the button below to request emoji status access and set an emoji status.</p>
-        <button id="setStatus">Request Access & Set Emoji Status</button>
+        <p>Click the button below to set your emoji status in Telegram.</p>
+        <button id="setStatus">Set Emoji Status</button>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready(); // Ensure the Mini App is initialized
 
-        document.getElementById("setStatus").addEventListener("click", function() {
-            // Request access to set emoji status
-            tg.requestEmojiStatusAccess().then(function() {
-                // Once permission is granted, set the emoji status
-                const customEmojiId = "5861533974148419995"; // Your custom emoji ID
-                const duration = 3600; // Optional: Set status duration (e.g., 3600 seconds = 1 hour)
+        let permissionGranted = false; // Track if the permission has been granted
 
-                tg.setEmojiStatus({ custom_emoji_id: customEmojiId, duration: duration });
-            }).catch(function(error) {
-                // Handle error (if user denies permission)
-                alert("Permission to set emoji status denied: " + error.message);
-            });
+        // Event listener for the button
+        document.getElementById("setStatus").addEventListener("click", function() {
+            // Check if the user has already granted permission
+            if (!permissionGranted) {
+                // Request emoji status access the first time
+                tg.requestEmojiStatusAccess().then(function() {
+                    // Permission granted
+                    permissionGranted = true; // Update permission status
+                    alert("Permission granted! You can now set your emoji status.");
+                    // Show the emoji status dialog
+                    setEmojiStatus();
+                }).catch(function(error) {
+                    // If permission is denied
+                    alert("Permission denied: " + error.message);
+                });
+            } else {
+                // If permission is already granted, just set the emoji status
+                setEmojiStatus();
+            }
         });
+
+        // Function to set emoji status
+        function setEmojiStatus() {
+            const customEmojiId = "5861533974148419995"; // Your custom emoji ID
+            const duration = 3600; // Optional: Set status duration (e.g., 3600 seconds = 1 hour)
+
+            // Set the emoji status with the provided custom emoji ID
+            tg.setEmojiStatus({ custom_emoji_id: customEmojiId, duration: duration });
+        }
     </script>
 
 </body>
