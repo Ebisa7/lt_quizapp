@@ -58,6 +58,10 @@
         #requestAccessBtn {
             background-color: #4CAF50;
         }
+        #requestAccessBtn.disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
@@ -118,6 +122,8 @@
                 successMessage.style.display = "block"; // Show the success message
                 requestAccessBtn.textContent = "Request Accepted"; // Change button text
                 requestAccessBtn.style.backgroundColor = "#00bfae"; // Change button color
+                requestAccessBtn.classList.add("disabled"); // Disable the request button
+                requestAccessBtn.disabled = true; // Disable the request button
                 setEmojiBtn.disabled = false; // Enable the Set Emoji Status button
                 setEmojiBtn.style.display = "block"; // Show the Set Emoji Status button
             }).catch(function(error) {
