@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Telegram Emoji Status</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+
+    <h2>Set Your Telegram Emoji Status</h2>
+    <p>Click the button below to set an emoji status in Telegram.</p>
+    
+    <button id="setStatus">Set Emoji Status</button>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready(); // Ensure the Mini App is ready
+
+        document.getElementById("setStatus").addEventListener("click", function() {
+            const customEmojiId = "5861533974148419995"; // Your custom emoji ID
+            const duration = 3600; // Optional: Set status duration (e.g., 3600 seconds = 1 hour)
+
+            tg.setEmojiStatus({ custom_emoji_id: customEmojiId, duration: duration });
+        });
+    </script>
+
+</body>
+</html>
