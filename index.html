@@ -281,7 +281,48 @@
 </div>
 
 
+  <!-- Adblocker Popup -->
+<div id="adblock-popup" class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Please Disable Your AdBlocker</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>🚀 LT Quiz is free because of ads! Please disable your adblocker to support us. Your support helps us keep providing quality quizzes for free. ❤️</p>
+        <p>✅ Refresh the page after disabling AdBlock.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="location.reload()">I Disabled It</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
   <script>
+
+
+  document.addEventListener("DOMContentLoaded", function() {
+    // Create an ad element (adblockers will block this)
+    let adTest = document.createElement("div");
+    adTest.className = "adsbygoogle";
+    adTest.style.display = "none";
+    document.body.appendChild(adTest);
+
+    setTimeout(() => {
+      if (getComputedStyle(adTest).display === "none") {
+        // If the ad is hidden, an adblocker is detected
+        let adblockModal = new bootstrap.Modal(document.getElementById('adblock-popup'));
+        adblockModal.show();
+      }
+      document.body.removeChild(adTest);
+    }, 500);
+  });
+
+
+    
 
   document.addEventListener("DOMContentLoaded", function() {
     let lastShown = localStorage.getItem("welcomeDisclaimerLastShown");
