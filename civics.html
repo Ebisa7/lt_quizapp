@@ -60,21 +60,30 @@
         const tg = window.Telegram.WebApp;
         tg.ready(); // Ensure the Mini App is initialized
 
-        let permissionGranted = false; // Track if the permission has been granted
+        let permissionGranted = false; // Track permission status
+
+        // Function to set emoji status
+        function setEmojiStatus() {
+            const customEmojiId = "5861533974148419995"; // Custom emoji ID
+            const duration = 3600; // Optional: Set status duration (in seconds)
+
+            tg.setEmojiStatus({
+                custom_emoji_id: customEmojiId,
+                duration: duration,
+            });
+        }
 
         // Event listener for the button
         document.getElementById("setStatus").addEventListener("click", function() {
-            // Check if the user has already granted permission
             if (!permissionGranted) {
-                // Request emoji status access the first time
+                // Request emoji status access
                 tg.requestEmojiStatusAccess().then(function() {
-                    // Permission granted
-                    permissionGranted = true; // Update permission status
+                    // Permission granted, update the status and set permission flag
+                    permissionGranted = true; // Permission granted
                     alert("Permission granted! You can now set your emoji status.");
-                    // Show the emoji status dialog
-                    setEmojiStatus();
+                    setEmojiStatus(); // Open the emoji status dialog
                 }).catch(function(error) {
-                    // If permission is denied
+                    // Handle permission denial
                     alert("Permission denied: " + error.message);
                 });
             } else {
@@ -82,15 +91,6 @@
                 setEmojiStatus();
             }
         });
-
-        // Function to set emoji status
-        function setEmojiStatus() {
-            const customEmojiId = "5861533974148419995"; // Your custom emoji ID
-            const duration = 3600; // Optional: Set status duration (e.g., 3600 seconds = 1 hour)
-
-            // Set the emoji status with the provided custom emoji ID
-            tg.setEmojiStatus({ custom_emoji_id: customEmojiId, duration: duration });
-        }
     </script>
 
 </body>
