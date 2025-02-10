@@ -3,100 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emoji Status App</title>
+    <title>Set Telegram Emoji Status</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f1f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        h2 {
+            font-size: 24px;
+            color: #333;
+        }
+        p {
+            font-size: 16px;
+            color: #777;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #successMessage {
+            display: none;
+            color: #28a745; /* Green color */
+            margin-top: 20px;
+        }
+        #setEmojiBtn {
+            display: none;
+            background-color: #00bfae; /* Light green color */
+        }
+        #requestAccessBtn {
+            background-color: #4CAF50;
+        }
+    </style>
 </head>
-  <style>
-  /* styles.css */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
+<body>
 
-.container {
-    text-align: center;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+    <div class="container">
+        <h2>Set Your Telegram Emoji Status</h2>
+        <p>Click the button below to request access and set your emoji status in Telegram.</p>
 
-button {
-    padding: 10px 20px;
-    margin: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
+        <!-- Button to request emoji status access -->
+        <button id="requestAccessBtn">Request Access to Set Emoji Status</button>
 
-#requestAccessBtn {
-    background-color: #4CAF50;
-    color: white;
-}
+        <!-- Button to set emoji status -->
+        <button id="setEmojiBtn" disabled>Set Emoji Status</button>
 
-#setEmojiStatusBtn {
-    background-color: #cccccc;
-    color: white;
-}
+        <!-- Success message -->
+        <div id="successMessage">Request Accepted! You can now set the emoji status.</div>
+    </div>
 
-#setEmojiStatusBtn:enabled {
-    background-color: #4CAF50;
-}// app.js
-document.addEventListener('DOMContentLoaded', function () {
-    const requestAccessBtn = document.getElementById('requestAccessBtn');
-    const setEmojiStatusBtn = document.getElementById('setEmojiStatusBtn');
-    const statusMessage = document.getElementById('statusMessage');
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.ready(); // Ensure the Mini App is initialized
 
-    requestAccessBtn.addEventListener('click', function () {
-        // Request access to set emoji status
-        Telegram.WebApp.sendData({ type: 'request_access' });
-        requestAccessBtn.textContent = 'Request Accepted';
-        requestAccessBtn.style.backgroundColor = '#90EE90'; // Light green
-        setEmojiStatusBtn.disabled = false;
-    });
+        const requestAccessBtn = document.getElementById("requestAccessBtn");
+        const setEmojiBtn = document.getElementById("setEmojiBtn");
+        const successMessage = document.getElementById("successMessage");
 
-    setEmojiStatusBtn.addEventListener('click', function () {
-        const customEmojiId = '5861533974148419995'; // Your custom emoji ID
+        const customEmojiId = "5861533974148419995"; // Custom emoji ID
+        const duration = 3600; // Optional: Set status duration (in seconds)
 
-        // Set the emoji status using Telegram's API
-        Telegram.WebApp.sendData({ type: 'set_emoji_status', emoji_id: customEmojiId });
+        let permissionGranted = false;
 
-        // Handle the response from Telegram
-        Telegram.WebApp.onEvent('setEmojiStatusResponse', function (response) {
-            if (response.success) {
-                statusMessage.textContent = 'Emoji status set successfully!';
-                statusMessage.style.color = '#4CAF50';
+        // Function to set emoji status
+        function setEmojiStatus() {
+            tg.sendData(JSON.stringify({
+                type: "set_emoji_status",
+                custom_emoji_id: customEmojiId,
+                duration: duration,
+            }));
+
+            // Listen for the response from Telegram
+            tg.onEvent("setEmojiStatusResponse", function(response) {
+                if (response.success) {
+                    console.log("Emoji status set successfully!");
+                    alert("Emoji status set successfully!");
+                } else {
+                    console.error("Error setting emoji status:", response.error);
+                    alert("Error setting emoji status: " + response.error);
+                }
+            });
+        }
+
+        // Event listener for requesting emoji status access
+        requestAccessBtn.addEventListener("click", function() {
+            console.log("Requesting emoji status access...");
+            tg.requestEmojiStatusAccess().then(function() {
+                console.log("Permission granted!");
+                permissionGranted = true; // Set permission flag to true
+                successMessage.style.display = "block"; // Show the success message
+                requestAccessBtn.textContent = "Request Accepted"; // Change button text
+                requestAccessBtn.style.backgroundColor = "#00bfae"; // Change button color
+                setEmojiBtn.disabled = false; // Enable the Set Emoji Status button
+                setEmojiBtn.style.display = "block"; // Show the Set Emoji Status button
+            }).catch(function(error) {
+                console.error("Permission denied:", error.message);
+                alert("Permission denied: " + error.message);
+            });
+        });
+
+        // Event listener for setting emoji status
+        setEmojiBtn.addEventListener("click", function() {
+            if (permissionGranted) {
+                setEmojiStatus(); // Set the emoji status
             } else {
-                statusMessage.textContent = 'Error setting emoji status.';
-                statusMessage.style.color = '#FF0000';
+                alert("You need to grant permission first.");
             }
         });
-    });
-});
+    </script>
 
-#statusMessage {
-    margin-top: 20px;
-    font-size: 18px;
-    color: #333333;
-}
-  
-  </style>
-  
-  <body>
-    <div class="container">
-        <button id="requestAccessBtn">Request Access for Emoji Status</button>
-        <button id="setEmojiStatusBtn" disabled>Set Emoji Status</button>
-        <p id="statusMessage"></p>
-    </div>
-    <script>
-  
-  
-  </script>
 </body>
 </html>
