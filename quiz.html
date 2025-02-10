@@ -197,11 +197,18 @@
       }
     });
 
-    telegram.WebApp.BackButton.show(); // Show the back button
+const tg = window.Telegram.WebApp;
 
-telegram.WebApp.BackButton.onClick(() => {
+tg.ready();
+
+// Show the back button
+tg.BackButton.show();
+
+// Define the behavior for the back button click
+tg.BackButton.onClick(() => {
     window.history.back(); // Go back to the previous page in history
 });
+;
 
   </script>
 
