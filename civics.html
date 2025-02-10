@@ -53,6 +53,10 @@
         }
         #setEmojiBtn {
             display: none;
+            background-color: #00bfae; /* Light green color */
+        }
+        #requestAccessBtn {
+            background-color: #4CAF50;
         }
     </style>
 </head>
@@ -66,10 +70,10 @@
         <button id="requestAccessBtn">Request Access to Set Emoji Status</button>
 
         <!-- Button to set emoji status -->
-        <button id="setEmojiBtn">Set Emoji Status</button>
+        <button id="setEmojiBtn" disabled>Set Emoji Status</button>
 
         <!-- Success message -->
-        <div id="successMessage">Permission granted! Now you can set the emoji status.</div>
+        <div id="successMessage">Request Accepted! You can now set the emoji status.</div>
     </div>
 
     <script>
@@ -105,9 +109,9 @@
             tg.requestEmojiStatusAccess().then(function() {
                 console.log("Permission granted!");
                 successMessage.style.display = "block"; // Show the success message
-                requestAccessBtn.style.display = "none"; // Hide the access request button
-                setEmojiBtn.style.display = "block"; // Show the set emoji button
-                permissionGranted = true;
+                requestAccessBtn.textContent = "Request Accepted"; // Change button text
+                requestAccessBtn.style.backgroundColor = "#00bfae"; // Change button color
+                setEmojiBtn.disabled = false; // Enable the Set Emoji Status button
             }).catch(function(error) {
                 console.error("Permission denied:", error.message);
                 alert("Permission denied: " + error.message);
