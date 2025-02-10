@@ -196,6 +196,13 @@
         Telegram.WebApp.setHeaderColor("#fff4ec"); // Set the Telegram header color
       }
     });
+
+    telegram.WebApp.BackButton.show(); // Show the back button
+
+telegram.WebApp.BackButton.onClick(() => {
+    window.history.back(); // Go back to the previous page in history
+});
+
   </script>
 
 </body>
