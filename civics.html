@@ -52,21 +52,26 @@
 
     <div class="container">
         <h2>Set Your Telegram Emoji Status</h2>
-        <p>Click the button below to set an emoji status in Telegram.</p>
-        <button id="setStatus">Set Emoji Status</button>
+        <p>Click the button below to request emoji status access and set an emoji status.</p>
+        <button id="setStatus">Request Access & Set Emoji Status</button>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready(); // Ensure the Mini App is initialized
 
-        // When the button is clicked, request the emoji status
         document.getElementById("setStatus").addEventListener("click", function() {
-            const customEmojiId = "5861533974148419995"; // Replace with your custom emoji ID
-            const duration = 3600; // Set expiration time for the emoji status (optional, in seconds)
+            // Request access to set emoji status
+            tg.requestEmojiStatusAccess().then(function() {
+                // Once permission is granted, set the emoji status
+                const customEmojiId = "5861533974148419995"; // Your custom emoji ID
+                const duration = 3600; // Optional: Set status duration (e.g., 3600 seconds = 1 hour)
 
-            // This will trigger the emoji status dialog in the Telegram app
-            tg.setEmojiStatus({ custom_emoji_id: customEmojiId, duration: duration });
+                tg.setEmojiStatus({ custom_emoji_id: customEmojiId, duration: duration });
+            }).catch(function(error) {
+                // Handle error (if user denies permission)
+                alert("Permission to set emoji status denied: " + error.message);
+            });
         });
     </script>
 
