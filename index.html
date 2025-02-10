@@ -299,34 +299,38 @@
   </div>
 </div>
 
-
-
-
-
-
-  <script>
-
-
-  document.addEventListener("DOMContentLoaded", function() {
-    // Create an ad element (adblockers will block this)
+<script>
+  // Adblocker detection function
+  function detectAdBlock() {
+    // Create an ad element (adblockers block this element)
     let adTest = document.createElement("div");
     adTest.className = "adsbygoogle";
-    adTest.style.display = "none";
+    adTest.style.position = "absolute";
+    adTest.style.top = "-9999px"; // Push off-screen to avoid disrupting layout
     document.body.appendChild(adTest);
 
+    // Check after a short delay if the ad is blocked (display: none)
     setTimeout(() => {
-      // Check if the ad element is hidden (adblocker detected)
       if (getComputedStyle(adTest).display === "none") {
-        // Adblocker detected, show the modal
-        let adblockModal = new bootstrap.Modal(document.getElementById('adblock-popup'), {
-          backdrop: 'static', // Prevent closing the modal by clicking outside
-          keyboard: false      // Prevent closing the modal by pressing Escape
-        });
-        adblockModal.show();
+        // Adblocker detected
+        showAdblockerPopup();
       }
-      document.body.removeChild(adTest);
-    }, 500);
-  });
+      document.body.removeChild(adTest); // Cleanup the test element
+    }, 500); // Short delay for detection
+  }
+
+  // Show the adblocker popup
+  function showAdblockerPopup() {
+    let adblockModal = new bootstrap.Modal(document.getElementById('adblock-popup'), {
+      backdrop: 'static', // Prevent closing the modal by clicking outside
+      keyboard: false      // Prevent closing the modal by pressing Escape
+    });
+    adblockModal.show();
+  }
+
+  // Always run the adblock detection in the background
+  detectAdBlock();
+
 
 
     
