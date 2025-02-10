@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lt quiz           - Grade 6 ministry questions</title>
-  <script>(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('groleegni.net',8919340,document.createElement('script'))</script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -252,12 +251,43 @@
           Used under educational fair use policy<br>
           LT Quiz is not affiliated with OEB
           <br><br>
-        </small>
+        <strong>Disclaimer:</strong> This site may display third-party advertisements. We do not control or endorse these ads. Please exercise caution when interacting with them.
+      </small>
       </div>
     </div>
   </footer>
 
+  <div id="ad-disclaimer" class="modal fade" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Disclaimer</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>This site may contain third-party advertisements. We do not control or endorse these ads. Please be cautious when interacting with them.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
   <script>
+
+
+  document.addEventListener("DOMContentLoaded", function() {
+    let disclaimerShown = localStorage.getItem("adDisclaimerShown");
+    if (!disclaimerShown) {
+      let modal = new bootstrap.Modal(document.getElementById('ad-disclaimer'));
+      modal.show();
+      localStorage.setItem("adDisclaimerShown", "true");
+    }
+  });
+
+    
     function back() {
       window.location.href = '/'; 
     }
