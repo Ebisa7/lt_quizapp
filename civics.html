@@ -53,7 +53,7 @@
     <div class="container">
         <h2>Set Your Telegram Emoji Status</h2>
         <p>Click the button below to set your emoji status in Telegram.</p>
-        <button id="setStatus">Set Emoji Status</button>
+        <button id="setStatus">Set Emoji Status now</button>
     </div>
 
     <script>
@@ -68,13 +68,17 @@
             const duration = 3600; // Optional: Set status duration (in seconds)
 
             console.log("Setting emoji status..."); // Debugging log
+
+            // Setting emoji status in Telegram
             tg.setEmojiStatus({
                 custom_emoji_id: customEmojiId,
                 duration: duration,
             }).then(() => {
                 console.log("Emoji status set successfully!"); // Debugging log
+                alert("Emoji status set successfully!"); // Notify user
             }).catch(err => {
                 console.error("Error setting emoji status:", err); // Error log
+                alert("Error setting emoji status: " + err.message); // Notify user
             });
         }
 
