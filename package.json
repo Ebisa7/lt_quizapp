@@ -1,0 +1,42 @@
+{
+  "name": "Lt quiz",
+  "version": "1.0.0",
+  "description": "My app",
+  "keywords": [
+    "my",
+    "app",
+    "ionic",
+    "quiz"
+  ],
+  "homepage": "https://github.com/Ebisa7/lt_quizapp#readme",
+  "bugs": {
+    "url": "https://github.com/Ebisa7/lt_quizapp/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ebisa7/lt_quizapp.git"
+  },
+  "license": "UNLICENSED",
+  "author": "Ebisa",
+  "scripts": {
+    "start": "ionic serve",
+    "build": "ionic build",
+    "test": "ionic test",
+    "lint": "ionic lint"
+  },
+  "dependencies": {
+    "@ionic/angular": "^7.0.0",
+    "rxjs": "~7.8.0",
+    "zone.js": "~0.11.4"
+  },
+  "devDependencies": {
+    "@angular/cli": "~15.0.0",
+    "@angular/compiler-cli": "~15.0.0",
+    "typescript": "~4.8.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "main": "src/index.html",
+  "type": "module"
+}
