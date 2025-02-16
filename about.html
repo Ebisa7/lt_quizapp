@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About us - LT Quiz</title>
+  <title>About Us - LT Quiz</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -53,88 +53,6 @@
       text-align: center;
     }
 
-
-    /* Container resizes based on viewport width */
-    .slider-container {
-      position: relative;
-      width: 90%;
-      display: flex;
-      
-      justify-content: center;
-      align-items: center;
-      max-width: 600px;
-      margin: auto;
-    }
-    .slider-wrapper {
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-    }
-    .slider {
-      display: flex;
-      scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
-      overflow-x: auto;
-      
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    .slider::-webkit-scrollbar {
-      display: none;
-    }
-    .cards {
-      flex: none;
-      scroll-snap-align: center;
-      background-color: #fffefd;
-      border-radius:15px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      margin-right: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 35px;
-      /* Increased width for larger cards */
-      width: 90%;
-      transition: transform 0.3s ease;
-      max-width: 90%;
-    }
-    .cards img {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-    .cards span {
-      font-size: 22px;
-      flex: 1;
-    }
-
-    .cards:hover {
-        transform: translateY(-5px);
-    }
-    .go-btn {
-      background-color: #f39c12;
-      border: none;
-      border-radius: 30px;
-      font-size: 20px;
-      padding: 10px 15px;
-      color: white;
-      cursor: pointer;
-    }
-    .go-btn:hover {
-      background-color: #e08e0b;
-    }
-
-
-
   </style>
 </head>
 <body>
@@ -163,76 +81,52 @@
   <!-- Hero Section -->
   <section class="hero">
     <div class="container">
-      <h1>Welcome to LT Quiz!</h1>
-      <p>Your ultimate platform for ministry exam preparation.</p>
-      <a href="/quiz" class="btn btn-primary btn-lg">Get Started</a>
+      <h1>About LT Quiz</h1>
+      <p>We are a platform dedicated to helping students prepare for ministry exams with authentic materials and interactive learning tools.</p>
     </div>
   </section>
-  <!-- scroller Section -->
 
-  <div class="slider-container">
-    <div class="slider-wrapper">
-      <div class="slider" id="slider">
-        <div class="cards">
-          <img src="oro.png" alt="Card 1" />
-          <span>Grade 6 Ministry </span>
-          <button class="go-btn" onclick="window.location.href='/ministry'"> Go </button>
+  <!-- About Us Content -->
+  <section class="py-5">
+    <div class="container">
+      <h2 class="text-center mb-5">Our Mission</h2>
+      <div class="row">
+        <div class="col-md-6">
+          <p class="lead">At LT Quiz, we are committed to providing students with accurate and relevant resources to aid in their ministry exam preparation. Our platform offers interactive quizzes, past year questions, and offline resources to ensure a comprehensive learning experience.</p>
         </div>
-        <div class="cards">
-          <img src="quiz.png" alt="Card 2" />
-          <span>Quiz mode</span>
-          <button class="go-btn"> Go </button>
-        </div>
-        <div class="cards">
-          <img src="pdf.png" alt="Card 3" />
-          <span>Save for offline</span>
-        </div>
-        <div class="cards">
-          <img src="soon.png" alt="Card 4" />
-          <span>More soon</span>
+        <div class="col-md-6">
+          <p class="lead">Our goal is to make studying for ministry exams more effective and engaging. We believe in helping students track their progress and providing tools that allow them to practice at their own pace, anywhere, anytime.</p>
         </div>
       </div>
     </div>
-  </div>
-
-
+  </section>
 
   <!-- Features Section -->
-<section class="py-5">
+  <section class="py-5">
     <div class="container">
-      <h2 class="text-center mb-5">What Makes LT Quiz Different?</h2>
+      <h2 class="text-center mb-5">Why Choose LT Quiz?</h2>
       <div class="row">
         <div class="col-md-4 mb-4">
           <div class="card">
             <div class="card-body">
-              <h3 class="card-title">Past Year Questions</h3>
-              <p class="card-text">We provide authentic exam questions for better preparation.</p>
+              <h3 class="card-title">Real Exam Experience</h3>
+              <p class="card-text">We provide past year questions to help you prepare for the real ministry exams.</p>
             </div>
           </div>
         </div>
         <div class="col-md-4 mb-4">
           <div class="card">
             <div class="card-body">
-              <h3 class="card-title">Quiz Format</h3>
-              <p class="card-text">Experience real exam conditions with interactive quizzes.</p>
+              <h3 class="card-title">Interactive Quizzes</h3>
+              <p class="card-text">Take quizzes in a format that simulates the actual exam environment, making learning fun and effective.</p>
             </div>
           </div>
         </div>
         <div class="col-md-4 mb-4">
           <div class="card">
             <div class="card-body">
-              <h3 class="card-title">Track Your Learning</h3>
-              <p class="card-text">Monitor your progress and improve your performance.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Add the 5th card -->
-        <div class="col-md-4 mb-4">
-          <div class="card">
-            <div class="card-body">
-              <h3 class="card-title">Download & Practice Offline</h3>
-              <p class="card-text">Download quizzes as PDFs to practice anytime, anywhere, even without an internet connection.</p>
+              <h3 class="card-title">Offline Access</h3>
+              <p class="card-text">Download quizzes and practice without an internet connection at any time.</p>
             </div>
           </div>
         </div>
@@ -241,7 +135,6 @@
   </section>
   
 
-  
   <footer class="footer">
     <div class="container">
       <div class="text-center">
@@ -250,7 +143,8 @@
           Used under educational fair use policy<br>
           LT Quiz is not affiliated with OEB
           <br><br>
-        </small>
+        <strong>Disclaimer:</strong> This site may display third-party advertisements. We do not control or endorse these ads. Please exercise caution when interacting with them.
+      </small>
       </div>
     </div>
   </footer>
@@ -259,38 +153,8 @@
     function back() {
       window.location.href = '/'; 
     }
-
-    const slider = document.getElementById("slider");
-let scrollInterval;
-
-
-function autoScroll() {
-    scrollInterval = setInterval(() => {
-        if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth) {
-            slider.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-            slider.scrollBy({ left: 280, behavior: 'smooth' });
-        }
-    }, 3000);
-}
-
-slider.addEventListener("mouseenter", () => clearInterval(scrollInterval));
-slider.addEventListener("mouseleave", autoScroll);
-
-autoScroll();
-
   </script>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      if (window.Telegram && Telegram.WebApp) {
-        Telegram.WebApp.expand(); // Expand the app to full screen (optional)
-        Telegram.WebApp.setHeaderColor("#fff4ec"); // Set the Telegram header color
-      }
-    });
-  </script>
-
 </body>
 </html>
