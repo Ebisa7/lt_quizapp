@@ -266,7 +266,7 @@
       
       <div id="quizContainer" class="mb-4">
         <!-- Questions will be injected here -->
-        <p>Maths quiz not available right now, come back later:(</p>
+        <p>Couldn't load more quizzes right now. Please check back later! :(</p>
       </div>
       
       <div class="text-center">
@@ -337,7 +337,7 @@
 
 
     const loadQuiz = () => {
-      db.collection('Mathss').get()
+      db.collection('Maths').get()
         .then(querySnapshot => {
           quizData = querySnapshot.docs.map(doc => doc.data());
           renderQuiz();
