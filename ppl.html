@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
+  <link rel="icon" type="image/png" href="icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <title>Admin Page</title>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <style>
+    /* Global Styles */
+    :root {
+      --primary-color: #4CAF50;
+      --secondary-color: #2196F3;
+      --error-color: #f44336;
+      --background-color: #f4f4f9;
+      --card-background: #ffffff;
+      --text-color: #333333;
+      --border-radius: 12px;
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+    }
+
+    .container {
+      background: var(--card-background);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+      color: var(--text-color);
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      background-color: #ebebeb;
+      border: none;
+      border-radius: var(--border-radius);
+      margin-top: 5px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    #statusPopup {
+      position: fixed;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--primary-color);
+      color: white;
+      padding: 10px 20px;
+      border-radius: var(--border-radius);
+      opacity: 0;
+      transition: top 0.5s ease, opacity 0.5s ease;
+      z-index: 9999;
+    }
+
+    #statusPopup.show {
+      top: 20px;
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Firestore Document Editor Section -->
+  <div class="container" id="editorSection">
+    <h1>Firestore Document Editor</h1>
+    <label for="collectionName">Collection Name:</label>
+    <input type="text" id="collectionName" placeholder="Enter collection name">
+    <br><br>
+    
+    <label for="documentName">Document Name:</label>
+    <input type="text" id="documentName" placeholder="Enter document name">
+    <br><br>
+    
+    <button id="loadDoc">Load Document</button>
+    <br><br>
+    
+    <textarea id="docData" rows="20" cols="80" placeholder="Document data will appear here..."></textarea>
+    <br><br>
+    
+    <button id="saveDoc">Save Document</button>
+  </div>
+
+  <!-- Status Popup -->
+  <div id="statusPopup"></div>
+
+  <script>
+    /************** Firebase Initialization **************/
+    // Fetch Firebase config securely from your backend
+    async function fetchFirebaseConfig() {
+      const response = await fetch('/api/getFirebaseConfig'); // Replace with your backend endpoint
+      return await response.json();
+    }
+
+    fetchFirebaseConfig().then(config => {
+      firebase.initializeApp(config);
+      const db = firebase.firestore();
+      const auth = firebase.auth();
+
+      /************** Login System **************/
+      const authButton = document.createElement('button');
+      authButton.id = 'authButton';
+      authButton.style.position = 'fixed';
+      authButton.style.top = '10px';
+      authButton.style.right = '10px';
+      authButton.style.padding = '10px 20px';
+      authButton.style.color = 'white';
+      authButton.style.border = 'none';
+      authButton.style.borderRadius = '5px';
+      authButton.style.cursor = 'pointer';
+      authButton.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Login';
+      authButton.style.backgroundColor = '#4CAF50';
+      document.body.appendChild(authButton);
+
+      authButton.addEventListener('click', () => {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        if (isLoggedIn) {
+          auth.signOut().then(() => {
+            localStorage.removeItem('isLoggedIn');
+            showStatus('Logged out successfully.', 'info');
+            authButton.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Login';
+            authButton.style.backgroundColor = '#4CAF50';
+          });
+        } else {
+          const email = prompt('Enter your email:');
+          const password = prompt('Enter your password:');
+          auth.signInWithEmailAndPassword(email, password).then(() => {
+            localStorage.setItem('isLoggedIn', 'true');
+            showStatus('Login successful!', 'success');
+            authButton.innerHTML = '<i class="fa-solid fa-right-from-bracket"></i> Logout';
+            authButton.style.backgroundColor = '#f44336';
+          }).catch(error => {
+            showStatus('Login failed. Please try again.', 'error');
+          });
+        }
+      });
+
+      /************** Firestore Document Editor **************/
+      document.getElementById("loadDoc").addEventListener("click", async () => {
+        const collectionName = document.getElementById("collectionName").value.trim();
+        const documentName = document.getElementById("documentName").value.trim();
+        if (!collectionName || !documentName) {
+          showStatus("Please enter both a collection and document name.", "error");
+          return;
+        }
+        try {
+          const docRef = db.collection(collectionName).doc(documentName);
+          const docSnap = await docRef.get();
+          if (docSnap.exists) {
+            document.getElementById("docData").value = JSON.stringify(docSnap.data(), null, 2);
+            showStatus("Document loaded successfully!", "success");
+          } else {
+            showStatus("Document does not exist.", "info");
+            document.getElementById("docData").value = "";
+          }
+        } catch (error) {
+          showStatus("Error loading document. Check the console for details.", "error");
+        }
+      });
+
+      document.getElementById("saveDoc").addEventListener("click", async () => {
+        const collectionName = document.getElementById("collectionName").value.trim();
+        const documentName = document.getElementById("documentName").value.trim();
+        if (!collectionName || !documentName) {
+          showStatus("Please enter both a collection and document name.", "error");
+          return;
+        }
+        let updatedData;
+        try {
+          updatedData = JSON.parse(document.getElementById("docData").value);
+        } catch (error) {
+          showStatus("Invalid JSON format. Please fix the errors and try again.", "error");
+          return;
+        }
+        try {
+          const docRef = db.collection(collectionName).doc(documentName);
+          await docRef.set(updatedData);
+          showStatus("Document updated successfully!", "success");
+          document.getElementById("collectionName").value = "";
+          document.getElementById("documentName").value = "";
+          document.getElementById("docData").value = "";
+        } catch (error) {
+          showStatus("Error updating document. Check the console for details.", "error");
+        }
+      });
+    });
+
+    /************** Status Popup Function **************/
+    function showStatus(message, type) {
+      const popup = document.getElementById('statusPopup');
+      popup.innerText = message;
+      popup.style.backgroundColor = type === 'error' ? '#f44336' : type === 'info' ? '#2196F3' : '#4CAF50';
+      popup.classList.add('show');
+      setTimeout(() => popup.classList.remove('show'), 3000);
+    }
+  </script>
+</body>
+</html>
