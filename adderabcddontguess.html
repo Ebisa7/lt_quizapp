@@ -12,105 +12,92 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   
   <style>
-    /* Common Body Styles */
+
+    /* Global Styles */
+    :root {
+      --primary-color: #4CAF50;
+      --secondary-color: #2196F3;
+      --error-color: #f44336;
+      --background-color: #f4f4f9;
+      --card-background: #ffffff;
+      --text-color: #333333;
+      --border-radius: 12px;
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
+      font-family: 'Arial', sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      margin: 0;
       padding: 20px;
     }
+
     h1 {
-      margin-top: 0;
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: var(--primary-color);
     }
-    /* Container Styles */
+
     .container {
-      max-width: 800px;
-      margin: 40px auto;
-      background: white;
+      background: var(--card-background);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
       padding: 20px;
-      border-radius: 5px;
-      position: relative;
+      margin-bottom: 20px;
     }
+
     label {
       font-weight: bold;
       display: block;
       margin-top: 10px;
+      color: var(--text-color);
     }
+
     input[type="text"],
     textarea {
       width: 100%;
       padding: 10px;
       background-color: #ebebeb;
       border: none;
-      border-radius: 20px;
+      border-radius: var(--border-radius);
       margin-top: 5px;
       box-sizing: border-box;
+      font-size: 14px;
     }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
     button {
       padding: 10px 20px;
-      background: #4CAF50;
+      background: var(--primary-color);
       color: white;
       border: none;
-      border-radius: 30px;
+      border-radius: var(--border-radius);
       cursor: pointer;
       font-size: 16px;
       margin-top: 20px;
+      transition: background 0.3s ease;
     }
+
     button:hover {
       background: #45a049;
     }
-    
-    /* Flexbox for Quiz Adder choices layout */
+
     .choices-container {
       display: flex;
       justify-content: space-between;
       gap: 10px;
+      margin-top: 10px;
     }
+
     .choices-container input {
       width: 100%;
     }
-    
-    /* Popup Toolbar Styles */
-    .toolbar {
-      display: none;
-      position: absolute;
-      background: white;
-      border: 1px solid #ccc;
-      padding: 5px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
-    }
-    .toolbar button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 14px;
-      margin: 0 5px;
-      color: #333;
-    }
-    .toolbar button:hover {
-      color: #000;
-    }
-    
-    /* Status Popup Styles */
-    #statusPopup {
-      position: fixed;
-      top: -50px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: #4CAF50; /* default to success green */
-      color: white;
-      padding: 10px 20px;
-      border-radius: 5px;
-      opacity: 0;
-      transition: top 0.5s ease, opacity 0.5s ease;
-      z-index: 9999;
-    }
-    #statusPopup.show {
-      top: 20px;
-      opacity: 1;
-    }
-    
-    /* Upload Section Styles */
+
     #dropZone {
       border: 2px dashed #ccc;
       padding: 20px;
@@ -118,14 +105,72 @@
       text-align: center;
       cursor: pointer;
       transition: border-color 0.3s ease;
+      border-radius: var(--border-radius);
     }
+
     #dropZone.dragover {
-      border-color: #4CAF50;
+      border-color: var(--primary-color);
     }
-    /* Hide the file input element */
-    #fileInput {
+
+    #statusPopup {
+      position: fixed;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--primary-color);
+      color: white;
+      padding: 10px 20px;
+      border-radius: var(--border-radius);
+      opacity: 0;
+      transition: top 0.5s ease, opacity 0.5s ease;
+      z-index: 9999;
+    }
+
+    #statusPopup.show {
+      top: 20px;
+      opacity: 1;
+    }
+
+    .toolbar {
       display: none;
+      position: absolute;
+      background: var(--card-background);
+      border: 1px solid #ccc;
+      padding: 5px;
+      box-shadow: var(--box-shadow);
+      z-index: 1000;
+      border-radius: var(--border-radius);
     }
+
+    .toolbar button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 0 5px;
+      color: var(--text-color);
+    }
+
+    .toolbar button:hover {
+      color: var(--primary-color);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .choices-container {
+        flex-direction: column;
+      }
+
+      .container {
+        padding: 15px;
+      }
+
+      h1 {
+        font-size: 20px;
+      }
+    }
+
+
   </style>
 </head>
 <body>
@@ -222,6 +267,8 @@
     <button id="uploadButton">Upload and Add Questions</button>
   </div>
   
+
+  
   <!-- Combined Scripts -->
   <script>
     /************** Firebase Initialization **************/
@@ -238,61 +285,83 @@
     const auth = firebase.auth();
     
     /************** Login System **************/
-    function checkLoginState() {
-      return localStorage.getItem('isLoggedIn') === 'true';
-    }
+    // Function to update the logout/login button
+function updateAuthButton() {
+  const logoutButton = document.getElementById('authButton');
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
-    function promptLogin() {
-      const email = prompt('Enter your email:');
-      if (!email) return;
-
-      const password = prompt('Enter your password:');
-      if (!password) return;
-
-      auth.signInWithEmailAndPassword(email, password)
-        .then(() => {
-          localStorage.setItem('isLoggedIn', 'true');
-          showStatus('Login successful!', 'success');
-        })
-        .catch((error) => {
-          console.error('Login failed:', error);
-          showStatus('Login failed. Please try again.', 'error');
-          promptLogin(); // Retry login
-        });
-    }
-
-    function logout() {
-      auth.signOut()
-        .then(() => {
-          localStorage.removeItem('isLoggedIn');
-          showStatus('Logged out successfully.', 'info');
-          promptLogin(); // Prompt for login again
-        })
-        .catch((error) => {
-          console.error('Logout failed:', error);
-          showStatus('Logout failed. Please try again.', 'error');
-        });
-    }
-
-    window.addEventListener('load', () => {
-      if (!checkLoginState()) {
-        promptLogin();
-      }
-    });
-
-    const logoutButton = document.createElement('button');
+  if (isLoggedIn) {
     logoutButton.textContent = 'Logout';
-    logoutButton.style.position = 'fixed';
-    logoutButton.style.top = '10px';
-    logoutButton.style.right = '10px';
-    logoutButton.style.padding = '10px 20px';
-    logoutButton.style.backgroundColor = '#f44336';
-    logoutButton.style.color = 'white';
-    logoutButton.style.border = 'none';
-    logoutButton.style.borderRadius = '5px';
-    logoutButton.style.cursor = 'pointer';
-    logoutButton.addEventListener('click', logout);
-    document.body.appendChild(logoutButton);
+    logoutButton.style.backgroundColor = '#f44336'; // Red for logout
+  } else {
+    logoutButton.textContent = 'Login';
+    logoutButton.style.backgroundColor = '#4CAF50'; // Green for login
+  }
+}
+
+// Logout function
+function logout() {
+  auth.signOut()
+    .then(() => {
+      localStorage.removeItem('isLoggedIn');
+      showStatus('Logged out successfully.', 'info');
+      updateAuthButton(); // Update button after logout
+      promptLogin(); // Prompt for login again
+    })
+    .catch((error) => {
+      console.error('Logout failed:', error);
+      showStatus('Logout failed. Please try again.', 'error');
+    });
+}
+
+// Login function
+function promptLogin() {
+  const email = prompt('Enter your email:');
+  if (!email) return;
+
+  const password = prompt('Enter your password:');
+  if (!password) return;
+
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => {
+      localStorage.setItem('isLoggedIn', 'true');
+      showStatus('Login successful!', 'success');
+      updateAuthButton(); // Update button after login
+    })
+    .catch((error) => {
+      console.error('Login failed:', error);
+      showStatus('Login failed. Please try again.', 'error');
+      promptLogin(); // Retry login
+    });
+}
+
+// Create the logout/login button
+const authButton = document.createElement('button');
+authButton.id = 'authButton';
+authButton.style.position = 'fixed';
+authButton.style.top = '10px';
+authButton.style.right = '10px';
+authButton.style.padding = '10px 20px';
+authButton.style.color = 'white';
+authButton.style.border = 'none';
+authButton.style.borderRadius = '5px';
+authButton.style.cursor = 'pointer';
+authButton.addEventListener('click', () => {
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  if (isLoggedIn) {
+    logout();
+  } else {
+    promptLogin();
+  }
+});
+
+// Append the button to the body
+document.body.appendChild(authButton);
+
+// Initialize the button state on page load
+window.addEventListener('load', () => {
+  updateAuthButton();
+});
 
   /************** Firebase Initialization **************/
 
@@ -562,6 +631,32 @@
       };
       reader.readAsText(file);
     });
+    
+    const darkModeToggle = document.getElementById('darkModeToggle');
+darkModeToggle.addEventListener('click', () => {
+  document.body.classList.toggle('dark-mode');
+});
+
+// Add dark mode styles
+const darkModeStyles = `
+  .dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+  }
+  .dark-mode .container {
+    background-color: #1e1e1e;
+    border-color: #333;
+  }
+  .dark-mode input, .dark-mode textarea {
+    background-color: #333;
+    color: #fff;
+    border-color: #555;
+  }
+`;
+const styleSheet = document.createElement("style");
+styleSheet.type = "text/css";
+styleSheet.innerText = darkModeStyles;
+document.head.appendChild(styleSheet);
     
   </script>
 </body>
