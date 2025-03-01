@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="robots" content="noindex">
+     <link rel="icon" type="image/png" href="icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Combined Firestore Editor, Quiz Adder & Quiz Uploader</title>
   <!-- Firebase SDKs (using compat version for easier migration) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   
   <style>
     /* Common Body Styles */
@@ -227,13 +229,73 @@
       apiKey: "AIzaSyDelPBnpY0xv-_ShgWreMZpld_SUWdRwJk",
       authDomain: "lt-website-bf509.firebaseapp.com",
       projectId: "lt-website-bf509",
-      storageBucket: "lt-website-bf509.firebasestorage.app",
+      storageBucket: "lt-website-bf509.appspot.com",
       messagingSenderId: "43884867628",
-      appId: "1:43884867628:web:617a17c06d37b014a86189",
-      measurementId: "G-XL54K0J9BX"
+      appId: "1:43884867628:web:617a17c06d37b014a86189"
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+    const auth = firebase.auth();
+    
+    /************** Login System **************/
+    function checkLoginState() {
+      return localStorage.getItem('isLoggedIn') === 'true';
+    }
+
+    function promptLogin() {
+      const email = prompt('Enter your email:');
+      if (!email) return;
+
+      const password = prompt('Enter your password:');
+      if (!password) return;
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+          localStorage.setItem('isLoggedIn', 'true');
+          showStatus('Login successful!', 'success');
+        })
+        .catch((error) => {
+          console.error('Login failed:', error);
+          showStatus('Login failed. Please try again.', 'error');
+          promptLogin(); // Retry login
+        });
+    }
+
+    function logout() {
+      auth.signOut()
+        .then(() => {
+          localStorage.removeItem('isLoggedIn');
+          showStatus('Logged out successfully.', 'info');
+          promptLogin(); // Prompt for login again
+        })
+        .catch((error) => {
+          console.error('Logout failed:', error);
+          showStatus('Logout failed. Please try again.', 'error');
+        });
+    }
+
+    window.addEventListener('load', () => {
+      if (!checkLoginState()) {
+        promptLogin();
+      }
+    });
+
+    const logoutButton = document.createElement('button');
+    logoutButton.textContent = 'Logout';
+    logoutButton.style.position = 'fixed';
+    logoutButton.style.top = '10px';
+    logoutButton.style.right = '10px';
+    logoutButton.style.padding = '10px 20px';
+    logoutButton.style.backgroundColor = '#f44336';
+    logoutButton.style.color = 'white';
+    logoutButton.style.border = 'none';
+    logoutButton.style.borderRadius = '5px';
+    logoutButton.style.cursor = 'pointer';
+    logoutButton.addEventListener('click', logout);
+    document.body.appendChild(logoutButton);
+
+  /************** Firebase Initialization **************/
+
     
     /************** Status Popup Function **************/
     function showStatus(message, type) {
@@ -500,6 +562,7 @@
       };
       reader.readAsText(file);
     });
+    
   </script>
 </body>
 </html>
