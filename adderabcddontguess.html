@@ -1,11 +1,14 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="robots" content="noindex">
      <link rel="icon" type="image/png" href="icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Combined Firestore Editor, Quiz Adder & Quiz Uploader</title>
+  <title>Admin page</title>
   <!-- Firebase SDKs (using compat version for easier migration) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
@@ -290,13 +293,18 @@ function updateAuthButton() {
   const logoutButton = document.getElementById('authButton');
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
-  if (isLoggedIn) {
-    logoutButton.textContent = 'Logout';
-    logoutButton.style.backgroundColor = '#f44336'; // Red for logout
-  } else {
-    logoutButton.textContent = 'Login';
-    logoutButton.style.backgroundColor = '#4CAF50'; // Green for login
-  }
+if (isLoggedIn) {
+  logoutButton.innerHTML = '<i class="fa-solid fa-right-from-bracket"></i> Logout';  // Use innerHTML for icon rendering
+  logoutButton.style.backgroundColor = '#f44336'; // Red for logout
+  logoutButton.style.borderRadius = '12px'; // Border radius for logout button
+} else {
+  logoutButton.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Login'; // Use innerHTML for icon rendering
+  logoutButton.style.backgroundColor = '#4CAF50'; // Green for login
+  logoutButton.style.borderRadius = '12px'; // Border radius for login button
+}
+
+
+
 }
 
 // Logout function
