@@ -1,42 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - Page Not Found</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f8f9fa;
-            padding: 50px;
-        }
-        h1 {
-            font-size: 50px;
-            color: #dc3545;
-        }
-        p {
-            font-size: 20px;
-            color: #6c757d;
-        }
-        a {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 18px;
-        }
-        a:hover {
-            background-color: #0056b3;
-        }
-    </style>
+  <link rel="icon" type="image/png" href="icon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Page Not Found</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #fff4ec;
+      color: #333;
+    }
+    .navbar {
+      background-color: #fcf0e8;
+      padding: 15px 30px;
+    }
+    .navbar-brand {
+      font-weight: 700;
+      color: #000 !important;
+    }
+    .btn-primary {
+      background-color: #f39c12;
+      border: none;
+      transition: transform 0.2s ease;
+    }
+    .btn-primary:hover {
+      background-color: #e67e22;
+      transform: scale(1.05);
+    }
+    .hero {
+      text-align: center;
+      padding: 50px 20px;
+    }
+    .hero h1 {
+      font-weight: 700;
+      color: #333;
+    }
+    .card {
+      border: none;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    .footer {
+      background-color: #fcf0e8;
+      color: #000;
+      padding: 20px 0;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
-    <h1>404</h1>
-    <p>Oops! The page you are looking for does not exist.</p>
-    <a href="/">Go to Homepage</a>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container">
+      <a class="navbar-brand" href="#"><img onclick="back()" src="logo.png" alt="Logo" height="50"> Quiz</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/"><i class="fa-solid fa-home"></i> Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/quiz"><i class="fa-solid fa-book"></i>Quizzes</a></li>
+          <li class="nav-item">
+            <a class="nav-link" href="/about">
+              <i class="fa-solid fa-info-circle"></i> About Us
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <h1>404 - Page Not Found</h1>
+      <p>Sorry, the page you are looking for does not exist.</p>
+      <a href="/" class="btn btn-primary btn-lg">Go to Homepage</a>
+    </div>
+  </section>
+  
+  <footer class="footer">
+    <div class="container">
+      <div class="text-center">
+        <small>
+          © 2016-2024 Oromia Education Bureau (OEB) <br>
+          Used under educational fair use policy<br>
+          LT Quiz is not affiliated with OEB
+          <br><br>
+        <strong>Disclaimer:</strong> This site may display third-party advertisements. We do not control or endorse these ads. Please exercise caution when interacting with them.
+      </small>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+          </html>
