@@ -299,7 +299,7 @@ body {
   
 
   <div class="quiz-container"> 
-    <h2 class="text-center mb-4 fw-bold"  id="quiz-title">... Grade 6 Ministry</h2>
+    <h2 class="text-center mb-4 fw-bold"  id="quiz-title">Maths Grade 6 Ministry</h2>
     
     <form id="quizForm">
       <div id="quizContainer" class="mb-4">
@@ -375,15 +375,17 @@ body {
       window.location.href = '/';
     }
 
+    
 // Get the value from the URL fragment (hash)
 const urlFragment = window.location.hash.substring(1);  // This removes the '#' from the fragment
 
-// Check if there is a value in the URL fragment and update the title
-if (urlFragment) {
+// Check if there is no fragment and navigate to 404.html
+if (!urlFragment) {
+  window.location.href = '404.html'; // Redirect to 404.html
+} else {
   const titleElement = document.getElementById('quiz-title');
   titleElement.textContent = urlFragment + ' Grade 6 Ministry';  // Update the text
 }
-
 // Function to update the download link based on the URL fragment
 function updateDownloadLink() {
     // Get the fragment from the URL (after the # symbol)
