@@ -374,100 +374,95 @@ body {
       window.location.href = '/';
     }
 
-    // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyDelPBnpY0xv-_ShgWreMZpld_SUWdRwJk",
-      authDomain: "lt-website-bf509.firebaseapp.com",
-      projectId: "lt-website-bf509",
-      storageBucket: "lt-website-bf509.appspot.com",
-      messagingSenderId: "43884867628",
-      appId: "1:43884867628:web:617a17c06d37b014a86189"
-    };
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDelPBnpY0xv-_ShgWreMZpld_SUWdRwJk",
+  authDomain: "lt-website-bf509.firebaseapp.com",
+  projectId: "lt-website-bf509",
+  storageBucket: "lt-website-bf509.appspot.com",
+  messagingSenderId: "43884867628",
+  appId: "1:43884867628:web:617a17c06d37b014a86189"
+};
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-    let quizData = [];
-    const constructionSections = [
-      { 
-        startIndex: 37,
-        endIndex: 38,
-        content: 'Fakkiin armaan gadii sirna marsaa dhiiga namaa agarsiisa.<br><img src="heart.png" alt="Human body" class="img-fluid">'
-      },
-      { 
-        startIndex: 38,
-        endIndex: 39,
-        content: 'Kaartaa Ardii Afrikaa armaan gadii irratti hundaa’uun gaaffii 39-40 deebisi.<br><img src="africa.png" alt="Africa Map" class="img-fluid">'
-      }
-    ];
+// Get the collection name from the URL (after the #)
+const collectionName = window.location.hash.replace('#', '');
 
-    const loadQuiz = () => {
-      db.collection('Maths').get()
-        .then(querySnapshot => {
-          quizData = querySnapshot.docs.map(doc => doc.data());
-          renderQuiz();
-        })
-        .catch(error => console.error("Error loading quiz:", error));
-    };
+// Ensure the collection name is valid
+if (!collectionName) {
+  console.error('No collection name provided in the URL.');
+} else {
+  // Dynamically load the quiz data based on the collection name
+  let quizData = [];
+  const constructionSections = [
+    { 
+      startIndex: 37,
+      endIndex: 38,
+      content: 'Fakkiin armaan gadii sirna marsaa dhiiga namaa agarsiisa.<br><img src="heart.png" alt="Human body" class="img-fluid">'
+    },
+    { 
+      startIndex: 38,
+      endIndex: 39,
+      content: 'Kaartaa Ardii Afrikaa armaan gadii irratti hundaa’uun gaaffii 39-40 deebisi.<br><img src="africa.png" alt="Africa Map" class="img-fluid">'
+    }
+  ];
 
-    const renderQuiz = () => {
-      const quizContainer = document.getElementById('quizContainer');
-      let html = '';
+  const loadQuiz = () => {
+    db.collection(collectionName).get()
+      .then(querySnapshot => {
+        quizData = querySnapshot.docs.map(doc => doc.data());
+        renderQuiz();
+      })
+      .catch(error => console.error("Error loading quiz:", error));
+  };
 
-      quizData.forEach((question, index) => {
-        constructionSections.forEach(section => {
-          if (index === section.startIndex) {
-            html += `
-              <div class="construction-block">
-                <div class="fw-bold mb-2">${section.content}</div>
-              </div>
-            `;
-          }
-        });
+  const renderQuiz = () => {
+    const quizContainer = document.getElementById('quizContainer');
+    let html = '';
 
-        html += `
-          <div class="question-card">
-            <div class="question-text">${index + 1}. ${question.question}</div>
-            <div class="choices">
-        `;
-
-        question.choices.forEach((choice, i) => {
+    quizData.forEach((question, index) => {
+      constructionSections.forEach(section => {
+        if (index === section.startIndex) {
           html += `
-            <div class="form-check mb-2">
-              <input class="form-check-input" type="radio" 
-                     name="q${index}" 
-                     id="q${index}-${i}"
-                     value="${String.fromCharCode(65 + i)}">
-              <label class="form-check-label" for="q${index}-${i}">
-                ${String.fromCharCode(65 + i)}. ${choice}
-              </label>
+            <div class="construction-block">
+              <div class="fw-bold mb-2">${section.content}</div>
             </div>
           `;
-        });
-
-        html += `</div></div>`;
+        }
       });
 
-      quizContainer.innerHTML = html;
-    };
+      html += `
+        <div class="question-card">
+          <div class="question-text">${index + 1}. ${question.question}</div>
+          <div class="choices">
+      `;
 
-    document.getElementById('quizForm').addEventListener('submit', e => {
-      e.preventDefault();
-      let score = 0;
-      
-      quizData.forEach((question, index) => {
-        const selected = document.querySelector(`input[name="q${index}"]:checked`);
-        if (selected && selected.value === question.correctAnswer) score++;
+      question.choices.forEach((choice, i) => {
+        html += `
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="radio" 
+                   name="q${index}" 
+                   id="q${index}-${i}"
+                   value="${String.fromCharCode(65 + i)}">
+            <label class="form-check-label" for="q${index}-${i}">
+              ${String.fromCharCode(65 + i)}. ${choice}
+            </label>
+          </div>
+        `;
       });
 
-      const resultModal = new bootstrap.Modal('#resultModal');
-      document.getElementById('resultText').textContent = 
-        `You scored ${score} out of ${quizData.length}`;
-      resultModal.show();
+      html += `</div></div>`;
     });
 
-    window.addEventListener('load', loadQuiz);
+    quizContainer.innerHTML = html;
+  };
+
+  loadQuiz();
+}
+
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
