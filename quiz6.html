@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,8 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <style>
-    /* Existing CSS styles */
-body {
+    body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: #fff4ec;
       color: #333;
@@ -190,13 +188,13 @@ body {
   position: absolute;
   top: 0; /* Position at the top */
   right: 0; /* Position at the right */
+  text-align: right;
   border: none;
   background: none;
   color: rgb(0, 0, 0);
   padding: 10px 15px;
   border-radius: 50px;
   cursor: pointer;
-  text-decoration: none;
   font-size: 20px;
   z-index: 9999; /* Ensure it stays above other elements */
 }
@@ -255,53 +253,59 @@ body {
   outline-color: #ffc05a; /* Change outline color on hover */
 }
 
+/* Timer container styles */
+.timer-container {
+  position: absolute;
+  top: 30px;
+  right: 10px;
+  font-size: 7px;
+background-color: none;
+  padding: 10px;
+  border-radius: 8px;
 
-    /* Other existing CSS styles */
+}
   </style>
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
- <nav class="navbar">
+  <nav class="navbar">
     <div class="container">
       <a class="navbar-brand" href="#">
         <img src="logo.png" alt="Logo" height="50" onclick="home()">
         <span class="navbar-text">Quiz</span>
       </a>
-
-
-      
-        
-      </div>
     </div>
   </nav>
-<div>
-  
 
   <div class="buttons-container">
     <button onclick="back()" title="Back" class="back"> 
-      <i class="fas fa-arrow-left"> </i> Back
+      <i class="fas fa-arrow-left"></i> Back
     </button>
-    <div class="download-btn">
-        <a href="#" id="download-btn" class="btn-link text-dark" title="Download" download>
-            <i class="fas fa-download"></i> Download PDF
-        </a>
-    </div>
-    
-    
+    <!-- Timer -->
+<div id="timerContainer" class="timer-container" style="display: none;">
+    <h3 id="timer"><i class="far fa-clock"></i>
+        <span id="time">00:00</span></h3>
   </div>
-  
-    
-
-
-  
-  
+    <div class="download-btn">
+      <a href="#" id="download-btn" class="btn-link text-dark" title="Download" download>
+        <i class="fas fa-download"></i>  Download PDF
+      </a>
+    </div>
+  </div>
 
   <div class="quiz-container"> 
-    <h2 class="text-center mb-4 fw-bold"  id="quiz-title">Maths Grade 6 Ministry</h2>
+    <h2 class="text-center mb-4 fw-bold" id="quiz-title">Maths Grade 6 Ministry</h2>
     
-    <form id="quizForm">
+    <!-- Start Button -->
+    <div class="text-center mb-4">
+      <button id="startBtn" title="Start" class="btn submit-btn text-white">Start Quiz</button>
+    </div>
+
+    
+
+    <form id="quizForm" style="display: none;">
       <div id="quizContainer" class="mb-4">
         <div class="loading-container">
           <div class="spinner"></div>
@@ -310,12 +314,8 @@ body {
         <!-- Questions will be injected here -->
       </div>
       
-      <div id="quizContainer" class="mb-4">
-        <!-- Questions will be injected here -->
-      </div>
-      
       <div class="text-center">
-        <button type="submit"  title="Submit" class="btn submit-btn text-white">Submit Quiz</button>
+        <button type="submit" title="Submit" class="btn submit-btn text-white">Submit Quiz</button>
       </div>
     </form>
   </div>
@@ -332,16 +332,11 @@ body {
           <h3 class="mb-3">Quiz Completed!</h3>
           <p id="resultText" class="lead"></p>
           <button type="button" class="btn btn-warning text-white" data-bs-dismiss="modal">OK</button>
+          <button id="retakeBtn" type="button" class="btn btn-secondary">Retake Quiz</button>
         </div>
       </div>
     </div>
   </div>
-  
-
-
-  
-
-
 
   <footer class="footer">
     <div class="container">
@@ -351,23 +346,18 @@ body {
           Used under educational fair use policy<br>
           LT Quiz is not affiliated with OEB
           <br><br>
-        <strong>Disclaimer:</strong> This site may display third-party advertisements. We do not control or endorse these ads. Please exercise caution when interacting with them.
-      </small>
+          <strong>Disclaimer:</strong> This site may display third-party advertisements. We do not control or endorse these ads. Please exercise caution when interacting with them.
+        </small>
       </div>
     </div>
   </footer>
-  
-
-  
-
-
 
   <!-- Scroll to Top Button -->
   <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa-solid fa-angle-up"></i></button>
 
   <!-- Existing scripts -->
   <script>
-       function back() {
+    function back() {
       window.location.href = '/ministry';
     }
 
@@ -375,141 +365,191 @@ body {
       window.location.href = '/';
     }
 
-    
-// Get the value from the URL fragment (hash)
-const urlFragment = window.location.hash.substring(1);  // This removes the '#' from the fragment
+    // Get the value from the URL fragment (hash)
+    const urlFragment = window.location.hash.substring(1);  // This removes the '#' from the fragment
 
-// Check if there is no fragment and navigate to 404.html
-if (!urlFragment) {
-  window.location.href = '4044.html'; // Redirect to 404.html
-} else {
-  const titleElement = document.getElementById('quiz-title');
-  titleElement.textContent = urlFragment + ' Grade 6 Ministry';  // Update the text
-}
-// Function to update the download link based on the URL fragment
-function updateDownloadLink() {
-    // Get the fragment from the URL (after the # symbol)
-    const urlFragment = window.location.hash.substring(1);  // This removes the '#'
-    
-    // Define the file name based on the fragment
-    const fileName = urlFragment ? `pdf/${urlFragment}.pdf` : 'pdf/default.pdf';  // Default to 'default.pdf' in 'pdf' folder if no fragment
-
-    // Get the download link element
-    const downloadLink = document.getElementById('download-btn');
-
-    // Update the download link to point to the correct PDF file in the 'pdf' folder
-    downloadLink.href = fileName;
-}
-
-// Run the function when the page loads
-window.onload = updateDownloadLink;
-
-// Optionally, update the link when the fragment changes (in case the user navigates)
-window.onhashchange = updateDownloadLink;
-
-
-
-// Run the function when the page loads
-window.onload = updateDownloadLink;
-
-// Optionally, update the link when the fragment changes (in case the user navigates)
-window.onhashchange = updateDownloadLink;
-
-
-
-// Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDelPBnpY0xv-_ShgWreMZpld_SUWdRwJk",
-  authDomain: "lt-website-bf509.firebaseapp.com",
-  projectId: "lt-website-bf509",
-  storageBucket: "lt-website-bf509.appspot.com",
-  messagingSenderId: "43884867628",
-  appId: "1:43884867628:web:617a17c06d37b014a86189"
-};
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-// Get the collection name from the URL (after the #)
-const collectionName = window.location.hash.replace('#', '');
-
-// Ensure the collection name is valid
-if (!collectionName) {
-  console.error('No collection name provided in the URL.');
-} else {
-  // Dynamically load the quiz data based on the collection name
-  let quizData = [];
-  const constructionSections = [
-    { 
-      startIndex: 37,
-      endIndex: 38,
-      content: 'Fakkiin armaan gadii sirna marsaa dhiiga namaa agarsiisa.<br><img src="heart.png" alt="Human body" class="img-fluid">'
-    },
-    { 
-      startIndex: 38,
-      endIndex: 39,
-      content: 'Kaartaa Ardii Afrikaa armaan gadii irratti hundaa’uun gaaffii 39-40 deebisi.<br><img src="africa.png" alt="Africa Map" class="img-fluid">'
+    // Check if there is no fragment and navigate to 404.html
+    if (!urlFragment) {
+      window.location.href = '4044.html'; // Redirect to 404.html
+    } else {
+      const titleElement = document.getElementById('quiz-title');
+      titleElement.textContent = urlFragment + ' Grade 6 Ministry';  // Update the text
     }
-  ];
 
-  const loadQuiz = () => {
-    db.collection(collectionName).get()
-      .then(querySnapshot => {
-        quizData = querySnapshot.docs.map(doc => doc.data());
-        renderQuiz();
-      })
-      .catch(error => console.error("Error loading quiz:", error));
-  };
+    // Function to update the download link based on the URL fragment
+    function updateDownloadLink() {
+      const urlFragment = window.location.hash.substring(1);  // This removes the '#'
+      const fileName = urlFragment ? `pdf/${urlFragment}.pdf` : 'pdf/default.pdf';  // Default to 'default.pdf' in 'pdf' folder if no fragment
+      const downloadLink = document.getElementById('download-btn');
+      downloadLink.href = fileName;
+    }
 
-  const renderQuiz = () => {
-    const quizContainer = document.getElementById('quizContainer');
-    let html = '';
+    // Run the function when the page loads
+    window.onload = updateDownloadLink;
 
-    quizData.forEach((question, index) => {
-      constructionSections.forEach(section => {
-        if (index === section.startIndex) {
+    // Optionally, update the link when the fragment changes (in case the user navigates)
+    window.onhashchange = updateDownloadLink;
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDelPBnpY0xv-_ShgWreMZpld_SUWdRwJk",
+      authDomain: "lt-website-bf509.firebaseapp.com",
+      projectId: "lt-website-bf509",
+      storageBucket: "lt-website-bf509.appspot.com",
+      messagingSenderId: "43884867628",
+      appId: "1:43884867628:web:617a17c06d37b014a86189"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // Get the collection name from the URL (after the #)
+    const collectionName = window.location.hash.replace('#', '');
+
+    // Ensure the collection name is valid
+    if (!collectionName) {
+      console.error('No collection name provided in the URL.');
+      window.location.href = '4044.html'; // Redirect to 404 page
+    } else {
+      let quizData = [];
+      let constructionSections = []; // Initialize as empty array
+      let timerDuration = 0; // Initialize timer duration
+
+      const loadQuiz = () => {
+        // Fetch the ajj document first
+        db.collection(collectionName).doc('ajj').get()
+          .then(doc => {
+            if (doc.exists) {
+              // Load quiz-specific metadata (e.g., constructionSections, timerDuration)
+              constructionSections = doc.data().constructionSections || [];
+              timerDuration = doc.data().time || 0; // Load timer duration
+            } else {
+              console.log('No ajj document found in the collection.');
+            }
+
+            // Fetch all quiz questions
+            return db.collection(collectionName).get();
+          })
+          .then(querySnapshot => {
+            quizData = querySnapshot.docs
+              .filter(doc => doc.id !== 'ajj') // Exclude the ajj document
+              .map(doc => doc.data());
+            renderQuiz();
+          })
+          .catch(error => console.error("Error loading quiz:", error));
+      };
+
+      const renderQuiz = () => {
+        const quizContainer = document.getElementById('quizContainer');
+        let html = '';
+
+        quizData.forEach((question, index) => {
+          // Check if the current index matches any construction section
+          constructionSections.forEach(section => {
+            if (index === section.startIndex) {
+              html += `
+                <div class="construction-block">
+                  <div class="fw-bold mb-2">${section.content}</div>
+                </div>
+              `;
+            }
+          });
+
+          // Render the question
           html += `
-            <div class="construction-block">
-              <div class="fw-bold mb-2">${section.content}</div>
-            </div>
+            <div class="question-card">
+              <div class="question-text">${index + 1}. ${question.question}</div>
+              <div class="choices">
           `;
-        }
+
+          // Render the choices
+          question.choices.forEach((choice, i) => {
+            html += `
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="radio" 
+                       name="q${index}" 
+                       id="q${index}-${i}"
+                       value="${String.fromCharCode(65 + i)}">
+                <label class="form-check-label" for="q${index}-${i}">
+                  ${String.fromCharCode(65 + i)}. ${choice}
+                </label>
+              </div>
+            `;
+          });
+
+          html += `</div></div>`;
+        });
+
+        quizContainer.innerHTML = html;
+      };
+
+      // Timer functionality
+      let timerInterval;
+      const startTimer = (duration) => {
+        let timer = duration * 60; // Convert minutes to seconds
+        const display = document.getElementById('time');
+        document.getElementById('timerContainer').style.display = 'block'; // Show the timer
+
+        timerInterval = setInterval(() => {
+          const minutes = Math.floor(timer / 60);
+          const seconds = timer % 60;
+
+          display.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+          if (--timer < 0) {
+            clearInterval(timerInterval);
+            calculateResult(true); // Calculate and display the result when time is up
+          }
+        }, 1000);
+      };
+
+      // Show result modal
+      const showResultModal = (message) => {
+        const resultText = document.getElementById('resultText');
+        resultText.textContent = message;
+        const resultModal = new bootstrap.Modal(document.getElementById('resultModal'));
+        resultModal.show();
+      };
+
+      // Calculate and display the result
+      const calculateResult = (timeUp = false) => {
+        let correctAnswers = 0;
+        quizData.forEach((question, index) => {
+          const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+          if (selectedOption && selectedOption.value === question.correctAnswer) {
+            correctAnswers++;
+          }
+        });
+        const message = timeUp
+          ? `Time is up! You got ${correctAnswers} out of ${quizData.length} questions correct!`
+          : `You got ${correctAnswers} out of ${quizData.length} questions correct!`;
+        showResultModal(message);
+      };
+
+      // Start button functionality
+      document.getElementById('startBtn').addEventListener('click', () => {
+        document.getElementById('startBtn').style.display = 'none';
+        document.getElementById('quizForm').style.display = 'block';
+        startTimer(timerDuration);
       });
 
-      html += `
-        <div class="question-card">
-          <div class="question-text">${index + 1}. ${question.question}</div>
-          <div class="choices">
-      `;
-
-      question.choices.forEach((choice, i) => {
-        html += `
-          <div class="form-check mb-2">
-            <input class="form-check-input" type="radio" 
-                   name="q${index}" 
-                   id="q${index}-${i}"
-                   value="${String.fromCharCode(65 + i)}">
-            <label class="form-check-label" for="q${index}-${i}">
-              ${String.fromCharCode(65 + i)}. ${choice}
-            </label>
-          </div>
-        `;
+      // Submit button functionality
+      document.getElementById('quizForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        calculateResult();
       });
 
-      html += `</div></div>`;
-    });
+      // Retake quiz button functionality
+      document.getElementById('retakeBtn').addEventListener('click', () => {
+        location.reload(); // Reload the page to retake the quiz
+      });
 
-    quizContainer.innerHTML = html;
-  };
-
-  loadQuiz();
-}
-
+      loadQuiz();
+    }
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -518,9 +558,6 @@ if (!collectionName) {
         Telegram.WebApp.setHeaderColor("#fff4ec"); // Set the Telegram header color
       }
     });
-
-
-
 
     // Add the Scroll to Top Button JavaScript
     let mybutton = document.getElementById("myBtn");
@@ -544,24 +581,23 @@ if (!collectionName) {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <script>
-     const tg = window.Telegram.WebApp;
+    const tg = window.Telegram.WebApp;
 
-tg.ready();
+    tg.ready();
 
-// Show the back button
-tg.BackButton.show();
+    // Show the back button
+    tg.BackButton.show();
 
-// Define the behavior for the back button click
-tg.BackButton.onClick(() => {
-    window.history.back(); // Go back to the previous page in history
-});
+    // Define the behavior for the back button click
+    tg.BackButton.onClick(() => {
+      window.history.back(); // Go back to the previous page in history
+    });
 
-      if (tg) {
-            tg.expand();
-            tg.enableClosingConfirmation();
-            tg.requestFullscreen();
-        }
-
+    if (tg) {
+      tg.expand();
+      tg.enableClosingConfirmation();
+      tg.requestFullscreen();
+    }
   </script>
 </body>
 </html>
