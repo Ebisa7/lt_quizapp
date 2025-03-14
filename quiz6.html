@@ -15,83 +15,84 @@
       color: #333;
     }
 
-/* Navbar Styles */
-.navbar {
-  background-color: #fff4ec; /* Light background */
-  padding: 10px 0;
-  color: black
+    /* Navbar Styles */
+    .navbar {
+      background-color: #fff4ec; /* Light background */
+      padding: 10px 0;
+      color: black;
+    }
 
-}
+    .navbar .navbar-brand {
+      display: flex;
+      align-items: center;
+    }
 
-.navbar .navbar-brand {
-  display: flex;
-  align-items: center;
-}
+    .navbar .navbar-brand img {
+      height: 60px;
+      font-size: 10px;
+    }
 
-.navbar .navbar-brand img {
-  height: 60px;
-  font-size: 10px;
-}
+    .navbar-text {
+      font-size: 22px;
+      color: #000000;
+      font-weight: bold;
+    }
 
-.navbar-text {
-  font-size: 22px;
-  color: #000000;
-  font-weight: bold;
-}
+    .navbar .navbar-nav {
+      margin-left: auto;
+    }
 
+    .navbar .navbar-nav .btn {
+      color: #333;
+      font-weight: 500;
+    }
 
+    .navbar .navbar-nav .btn:hover {
+      color: #f39c12;
+      background-color: transparent;
+    }
 
-.navbar .navbar-nav {
-  margin-left: auto;
-}
+    /* Navbar Toggle Button for Small Screens */
+    .navbar-toggler {
+      border-color: #f39c12;
+    }
 
-.navbar .navbar-nav .btn {
-  color: #333;
-  font-weight: 500;
-}
+    .navbar-toggler-icon {
+      background-color: #f39c12;
+    }
 
-.navbar .navbar-nav .btn:hover {
-  color: #f39c12;
-  background-color: transparent;
-}
-
-/* Navbar Toggle Button for Small Screens */
-.navbar-toggler {
-  border-color: #f39c12;
-}
-
-.navbar-toggler-icon {
-  background-color: #f39c12;
-}
-
-/* Active Link Styles */
-.navbar-nav .nav-item.active .nav-link {
-  color: #f39c12;
-  font-weight: 600;
-}
-
-
+    /* Active Link Styles */
+    .navbar-nav .nav-item.active .nav-link {
+      color: #f39c12;
+      font-weight: 600;
+    }
 
     .quiz-container {
-  max-width: 800px;
-  margin: 2rem auto;
-  padding: 20px;
-}
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 20px;
+    }
 
-.quiz-container img {
-  display: block; /* Makes the image block-level */
-
-  margin-left: auto; /* Centers the image horizontally */
-  margin-right: auto; /* Centers the image horizontally */
-}
-
+    .quiz-container img {
+      display: block; /* Makes the image block-level */
+      margin-left: auto; /* Centers the image horizontally */
+      margin-right: auto; /* Centers the image horizontally */
+    }
 
     .question-card {
       background: white;
       border-radius: 12px;
       padding: 20px;
       margin-bottom: 20px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .question-card.correct {
+      border-left: 4px solid #28a745; /* Green border for correct answers */
+    }
+
+    .question-card.incorrect {
+      border-left: 4px solid #dc3545; /* Red border for incorrect answers */
     }
 
     .question-text {
@@ -116,7 +117,6 @@
 
     .submit-btn:hover {
       background-color: #ffb43a;
-
     }
 
     .construction-block {
@@ -133,137 +133,169 @@
       margin-top: 15px;
       border-radius: 8px;
     }
+
     .loading-container {
-  display: flex;
-  justify-content: center; /* Centers the content horizontally */
-  align-items: center; /* Centers the content vertically */
-  gap: 10px; /* Adds some space between the spinner and the text */
-}
+      display: flex;
+      justify-content: center; /* Centers the content horizontally */
+      align-items: center; /* Centers the content vertically */
+      gap: 10px; /* Adds some space between the spinner and the text */
+    }
 
-.spinner {
-  border: 2px solid #17273b;
-  border-top: 2px solid #ffffff;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  animation: spin 1s linear infinite;
-}
+    .spinner {
+      border: 2px solid #17273b;
+      border-top: 2px solid #ffffff;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+    }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
 
-.loading-text {
-  font-weight: bold;
-  color: #333;
-  font-size: 1.2rem;
-}
+    .loading-text {
+      font-weight: bold;
+      color: #333;
+      font-size: 1.2rem;
+    }
 
-/* Container for both buttons */
-.buttons-container {
-  position: relative;
-  width: 100%;
-  height: 60px; /* Adjust height as needed */
-}
+    /* Container for both buttons */
+    .buttons-container {
+      position: relative;
+      width: 100%;
+      height: 60px; /* Adjust height as needed */
+    }
 
-/* Back button (top left) */
-.back {
-  position: absolute;
-  top: 0; /* Position at the top */
-  left: 0; /* Position at the left */
-  border: none;
-  background: none;
-  color: rgb(0, 0, 0);
-  padding: 10px 15px;
-  border-radius: 50px;
-  cursor: pointer;
-  text-decoration: none;
-  font-size: 20px;
-  z-index: 9999; /* Ensure it stays above other elements */
-}
+    /* Back button (top left) */
+    .back {
+      position: absolute;
+      top: 0; /* Position at the top */
+      left: 0; /* Position at the left */
+      border: none;
+      background: none;
+      color: rgb(0, 0, 0);
+      padding: 10px 15px;
+      border-radius: 50px;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 20px;
+      z-index: 9999; /* Ensure it stays above other elements */
+    }
 
-/* Download button (top right) */
-.download-btn {
-  position: absolute;
-  top: 0; /* Position at the top */
-  right: 0; /* Position at the right */
-  text-align: right;
-  border: none;
-  background: none;
-  color: rgb(0, 0, 0);
-  padding: 10px 15px;
-  border-radius: 50px;
-  cursor: pointer;
-  font-size: 20px;
-  z-index: 9999; /* Ensure it stays above other elements */
-}
+    /* Download button (top right) */
+    .download-btn {
+      position: absolute;
+      top: 0; /* Position at the top */
+      right: 0; /* Position at the right */
+      text-align: right;
+      border: none;
+      background: none;
+      color: rgb(0, 0, 0);
+      padding: 10px 15px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 20px;
+      z-index: 9999; /* Ensure it stays above other elements */
+    }
 
-/* Hover effects */
-.back:hover, .download-btn:hover {
-  color: #f39c12; /* Change color on hover */
-}
+    /* Hover effects */
+    .back:hover, .download-btn:hover {
+      color: #f39c12; /* Change color on hover */
+    }
 
-.footer {
-    background-color: #fcf0e8 !important;
-    border-top: 1px solid #eee4dd;
-    margin-top: auto;
-    width: 100%;
-  }
-    
- 
-
-
-
-
-    
-
-
-
-
+    .footer {
+      background-color: #fcf0e8 !important;
+      border-top: 1px solid #eee4dd;
+      margin-top: auto;
+      width: 100%;
+    }
 
     /* Add the Scroll to Top Button CSS */
-   #myBtn {
-  display: none; /* Hidden by default */
-  position: fixed; /* Fixed/sticky position */
-  bottom: 20px; /* Place the button at the bottom of the page */
-  right: 30px; /* Place the button 30px from the right */
-  z-index: 99; /* Make sure it does not overlap */
-  width: 40px; /* Set width to make it a circle */
-  height: 40px; /* Set height to match width */
-  font-size: 24px; /* Increase font size */
-  border: 2px solid #f39c12; /* Add a solid black border */
-  outline: 0.2px solid #f39c12; /* Add a solid black outline */
-  background-color: #f39c12; /* Set a background color */
-  color: white; /* Text color */
-  cursor: pointer; /* Add a mouse pointer on hover */
-   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  padding: 0; /* Remove padding */
-  border-radius: 50%; /* Make it a circle */
-  transition: background-color 0.3s, color 0.3s, border-color 0.3s, outline-color 0.3s; /* Smooth transitions */
-  display: hidden;
-  justify-content: center;
-  align-items: center; /* Center the text inside the button */
-}
+    #myBtn {
+      display: none; /* Hidden by default */
+      position: fixed; /* Fixed/sticky position */
+      bottom: 20px; /* Place the button at the bottom of the page */
+      right: 30px; /* Place the button 30px from the right */
+      z-index: 99; /* Make sure it does not overlap */
+      width: 40px; /* Set width to make it a circle */
+      height: 40px; /* Set height to match width */
+      font-size: 24px; /* Increase font size */
+      border: 2px solid #f39c12; /* Add a solid black border */
+      outline: 0.2px solid #f39c12; /* Add a solid black outline */
+      background-color: #f39c12; /* Set a background color */
+      color: white; /* Text color */
+      cursor: pointer; /* Add a mouse pointer on hover */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding: 0; /* Remove padding */
+      border-radius: 50%; /* Make it a circle */
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s, outline-color 0.3s; /* Smooth transitions */
+      display: hidden;
+      justify-content: center;
+      align-items: center; /* Center the text inside the button */
+    }
 
-#myBtn:hover {
-  background-color: #ffc05a; /* Change background color on hover */
-  color: white; /* Change text color on hover */
-  border-color: #ffc05a; /* Change border color on hover */
-  outline-color: #ffc05a; /* Change outline color on hover */
-}
+    #myBtn:hover {
+      background-color: #ffc05a; /* Change background color on hover */
+      color: white; /* Change text color on hover */
+      border-color: #ffc05a; /* Change border color on hover */
+      outline-color: #ffc05a; /* Change outline color on hover */
+    }
 
-/* Timer container styles */
-.timer-container {
-  position: absolute;
-  top: 30px;
-  right: 10px;
-  font-size: 7px;
-background-color: none;
-  padding: 10px;
-  border-radius: 8px;
+    /* Timer container styles */
+    .timer-container {
+      position: absolute;
+      top: 30px;
+      right: 10px;
+      font-size: 7px;
+      background-color: none;
+      padding: 10px;
+      border-radius: 8px;
+    }
 
-}
+    /* Modal styles */
+    .modal-content {
+      background-color: #fff4ec; /* Match the background color of the page */
+      border-radius: 12px; /* Match the border radius of other elements */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    }
+
+    .modal-body {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .modal-body img {
+      width: 100px;
+      margin-bottom: 20px;
+    }
+
+    .modal-body h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .modal-body p {
+      font-size: 1.1rem;
+      color: #555;
+    }
+
+    .modal-body .btn {
+      margin: 5px;
+      padding: 10px 20px;
+      font-weight: 600;
+    }
+
+    .modal-body .btn-warning {
+      background-color: #f39c12;
+      border: none;
+    }
+
+    .modal-body .btn-warning:hover {
+      background-color: #ffb43a;
+    }
   </style>
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
@@ -284,10 +316,10 @@ background-color: none;
       <i class="fas fa-arrow-left"></i> Back
     </button>
     <!-- Timer -->
-<div id="timerContainer" class="timer-container" style="display: none;">
-    <h3 id="timer"><i class="far fa-clock"></i>
+    <div id="timerContainer" class="timer-container" style="display: none;">
+      <h3 id="timer"><i class="far fa-clock"></i>
         <span id="time">00:00</span></h3>
-  </div>
+    </div>
     <div class="download-btn">
       <a href="#" id="download-btn" class="btn-link text-dark" title="Download" download>
         <i class="fas fa-download"></i>  Download PDF
@@ -297,13 +329,11 @@ background-color: none;
 
   <div class="quiz-container"> 
     <h2 class="text-center mb-4 fw-bold" id="quiz-title">Maths Grade 6 Ministry</h2>
-    
+
     <!-- Start Button -->
     <div class="text-center mb-4">
       <button id="startBtn" title="Start" class="btn submit-btn text-white">Start Quiz</button>
     </div>
-
-    
 
     <form id="quizForm" style="display: none;">
       <div id="quizContainer" class="mb-4">
@@ -313,11 +343,16 @@ background-color: none;
         </div>
         <!-- Questions will be injected here -->
       </div>
-      
+
       <div class="text-center">
         <button type="submit" title="Submit" class="btn submit-btn text-white">Submit Quiz</button>
       </div>
     </form>
+
+    <!-- Retake Quiz Button -->
+    <div class="text-center mt-4">
+      <button id="retakeBtn" type="button" class="btn btn-secondary">Retake Quiz</button>
+    </div>
   </div>
 
   <!-- Bootstrap Modal -->
@@ -332,7 +367,6 @@ background-color: none;
           <h3 class="mb-3">Quiz Completed!</h3>
           <p id="resultText" class="lead"></p>
           <button type="button" class="btn btn-warning text-white" data-bs-dismiss="modal">OK</button>
-          <button id="retakeBtn" type="button" class="btn btn-secondary">Retake Quiz</button>
         </div>
       </div>
     </div>
@@ -415,6 +449,7 @@ background-color: none;
       let quizData = [];
       let constructionSections = []; // Initialize as empty array
       let timerDuration = 0; // Initialize timer duration
+      let timerStarted = false; // Flag to track if the timer has started
 
       const loadQuiz = () => {
         // Fetch the ajj document first
@@ -490,6 +525,7 @@ background-color: none;
         let timer = duration * 60; // Convert minutes to seconds
         const display = document.getElementById('time');
         document.getElementById('timerContainer').style.display = 'block'; // Show the timer
+        timerStarted = true; // Set the flag to true when the timer starts
 
         timerInterval = setInterval(() => {
           const minutes = Math.floor(timer / 60);
@@ -499,7 +535,9 @@ background-color: none;
 
           if (--timer < 0) {
             clearInterval(timerInterval);
-            calculateResult(true); // Calculate and display the result when time is up
+            if (timerStarted) { // Only show the popup if the timer started
+              calculateResult(true); // Calculate and display the result when time is up
+            }
           }
         }, 1000);
       };
@@ -516,11 +554,17 @@ background-color: none;
       const calculateResult = (timeUp = false) => {
         let correctAnswers = 0;
         quizData.forEach((question, index) => {
+          const questionCard = document.querySelector(`.question-card:nth-child(${index + 1})`);
           const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+
           if (selectedOption && selectedOption.value === question.correctAnswer) {
             correctAnswers++;
+            questionCard.classList.add('correct'); // Add correct class
+          } else {
+            questionCard.classList.add('incorrect'); // Add incorrect class
           }
         });
+
         const message = timeUp
           ? `Time is up! You got ${correctAnswers} out of ${quizData.length} questions correct!`
           : `You got ${correctAnswers} out of ${quizData.length} questions correct!`;
@@ -596,8 +640,4 @@ background-color: none;
     if (tg) {
       tg.expand();
       tg.enableClosingConfirmation();
-      tg.requestFullscreen();
-    }
-  </script>
-</body>
-</html>
+      tg.re
