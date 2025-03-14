@@ -329,7 +329,96 @@
   <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
-  <!-- Add your HTML structure here (same as before) -->
+
+<nav class="navbar">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img src="logo.png" alt="Logo" height="50" onclick="home()">
+        <span class="navbar-text">Quiz</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="buttons-container">
+    <button onclick="back()" title="Back" class="back"> 
+      <i class="fas fa-arrow-left"></i> Back
+    </button>
+    <!-- Timer -->
+    <div id="timerContainer" class="timer-container" style="display: none;">
+      <h3 id="timer"><i class="far fa-clock"></i>
+        <span id="time">00:00</span></h3>
+    </div>
+    <div class="download-btn">
+      <a href="#" id="download-btn" class="btn-link text-dark" title="Download" download>
+        <i class="fas fa-download"></i>  Download PDF
+      </a>
+    </div>
+  </div>
+
+  <div class="quiz-container"> 
+    <h2 class="text-center mb-4 fw-bold" id="quiz-title">Maths Grade 6 Ministry</h2>
+
+    <!-- Start Button -->
+    <div class="text-center mb-4">
+      <button id="startBtn" title="Start" class="btn submit-btn text-white">Start Quiz</button>
+    </div>
+
+    <form id="quizForm" style="display: none;">
+      <div id="quizContainer" class="mb-4">
+        <div class="loading-container">
+          <div class="spinner"></div>
+          <span class="loading-text">Loading...</span>
+        </div>
+        <!-- Questions will be injected here -->
+      </div>
+<div id="explanationPopup" class="explanation-popup">
+  <p id="explanationText"></p>
+</div>
+
+      <div class="text-center">
+        <button type="submit" title="Submit" class="btn submit-btn text-white">Submit Quiz</button>
+      </div>
+    </form>
+
+    <!-- Retake Quiz Button -->
+    <div class="text-center mt-4">
+      <button id="retakeBtn" type="button" class="btn btn-secondary">Retake Quiz</button>
+    </div>
+  </div>
+
+  <!-- Bootstrap Modal -->
+  <div class="modal fade" id="resultModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center py-4">
+          <img src="https://cdn-icons-png.flaticon.com/128/10792/10792513.png" 
+               alt="Result" 
+               class="mb-3"
+               style="width: 100px;">
+          <h3 class="mb-3">Quiz Completed!</h3>
+          <p id="resultText" class="lead"></p>
+          <button type="button" class="btn btn-warning text-white" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="text-center">
+        <small>
+          © 2016-2024 Oromia Education Bureau (OEB) <br>
+          Used under educational fair use policy<br>
+          LT Quiz is not affiliated with OEB
+          <br><br>
+          <strong>Disclaimer:</strong> This site may display third-party advertisements. We do not control or endorse these ads. Please exercise caution when interacting with them.
+        </small>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll to Top Button -->
+  <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa-solid fa-angle-up"></i></button>
 
   <script>
     // Firebase configuration
